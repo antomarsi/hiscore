@@ -1,17 +1,24 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  Unique,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
-import { Length, IsNotEmpty, IsEmail } from 'class-validator';
-import * as bcrypt from 'bcryptjs';
+import { Length } from 'class-validator';
+import * as crypto from 'crypto';
+import { User } from './User';
+import { Score } from './Score';
 
 @Entity()
-export class User {
+export class Game {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column()
+  @Length(4, 20)
   name: string;
 
   @Column()
@@ -26,11 +33,13 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  hashPassword() {
-    this.apiKey = bcrypt.hashSync(this.apiKey, 8);
-  }
+  @ManyToOne((type) => User, (user) => user.games)
+  user: User;
 
-  checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
-    return bcrypt.compareSync(unencryptedPassword, this.apiKey);
+  @OneToMany((type) => Score, (score) => score.game)
+  scores: Score[];
+
+  generateKey() {
+    this.apiKey = crypto.randomBytes(20).toString('hex');
   }
 }

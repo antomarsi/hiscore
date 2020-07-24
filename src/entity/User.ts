@@ -5,9 +5,11 @@ import {
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Length, IsNotEmpty, IsEmail } from 'class-validator';
 import * as bcrypt from 'bcryptjs';
+import { Game } from './Game';
 
 @Entity()
 @Unique(['email'])
@@ -30,6 +32,9 @@ export class User {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany((type) => Game, (game) => game.user)
+  games: Game[];
 
   hashPassword() {
     this.password = bcrypt.hashSync(this.password, 8);
