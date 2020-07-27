@@ -2,12 +2,9 @@ import 'reflect-metadata';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as morgan from 'morgan';
-import * as dotenv from 'dotenv';
 import { AppRoutes } from './routes';
 import { createExpressServer } from 'routing-controllers';
 import { createConnections } from 'typeorm';
-
-dotenv.config();
 
 createConnections()
   .then(async (connection) => {

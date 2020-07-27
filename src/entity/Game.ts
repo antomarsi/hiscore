@@ -4,7 +4,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  ObjectIdColumn,
   OneToMany,
 } from 'typeorm';
 import { Length } from 'class-validator';
@@ -14,7 +14,7 @@ import { Score } from './Score';
 
 @Entity()
 export class Game {
-  @PrimaryGeneratedColumn()
+  @ObjectIdColumn()
   id: number;
 
   @Column()

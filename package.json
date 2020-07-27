@@ -9,31 +9,28 @@
   "dependencies": {
     "@types/morgan": "^1.9.1",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.9",
     "morgan": "^1.10.0",
-    "multer": "^1.4.2",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.9.0-alpha.6",
     "typeorm": "^0.2.25"
   },
   "scripts": {
     "start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
-    "start:watch": "nodemon",
+    "start:watch": "yarn nodemon",
     "build": "tsc"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.6",
-    "@types/dotenv": "^8.2.0",
     "@types/helmet": "^0.0.47",
     "@types/jsonwebtoken": "^8.5.0",
-    "@types/multer": "^1.4.3",
     "@types/node": "^14.0.26",
     "eslint": "^7.5.0",
     "eslint-plugin-import": "^2.22.0",

@@ -1,6 +1,6 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  ObjectIdColumn,
   Column,
   Unique,
   CreateDateColumn,
@@ -14,7 +14,7 @@ import { Game } from './Game';
 @Entity()
 @Unique(['email'])
 export class User {
-  @PrimaryGeneratedColumn()
+  @ObjectIdColumn()
   id: number;
 
   @Column()
