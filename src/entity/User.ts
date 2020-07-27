@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  PrimaryColumn,
 } from 'typeorm';
 import { Length, IsNotEmpty, IsEmail } from 'class-validator';
 import * as bcrypt from 'bcryptjs';
@@ -14,7 +15,7 @@ import { Game } from './Game';
 @Entity()
 @Unique(['email'])
 export class User {
-  @ObjectIdColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()

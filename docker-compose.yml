@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
   api:
@@ -9,9 +9,9 @@ services:
       - .:/usr/src/app
     ports:
       - '5000:5000'
-    command: yarn start:watch
     env_file:
-      - .env.local
+      - .env
+    tty: true
     depends_on:
       - mongo
     links:
@@ -24,7 +24,7 @@ services:
     environment:
       - MONGO_INITDB_DATABASE=database
     ports:
-      - '27017:27017'
+      - '27018:27017'
     volumes:
       - mongodata:/data/db
     networks:

@@ -11,6 +11,7 @@ import { Length } from 'class-validator';
 import * as crypto from 'crypto';
 import { User } from './User';
 import { Score } from './Score';
+import * as jwt from 'jsonwebtoken';
 
 @Entity()
 export class Game {

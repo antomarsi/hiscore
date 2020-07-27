@@ -1,4 +1,14 @@
-import { Get, Put, JsonController, Post, UseBefore, Param, Req, Res } from 'routing-controllers';
+import {
+  Get,
+  Put,
+  JsonController,
+  Post,
+  UseBefore,
+  Param,
+  Req,
+  Res,
+  Delete,
+} from 'routing-controllers';
 import { checkJwt } from '../middlewares/checkJwt';
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
@@ -6,9 +16,9 @@ import { User } from '../entity/User';
 import { validate } from 'class-validator';
 import { Game } from '../entity/Game';
 
-@JsonController('game')
+@JsonController('/api/game')
 export class GameController {
-  @Post('/')
+  @Post('')
   @UseBefore(checkJwt)
   async post(@Req() req: Request, @Res() res: Response) {
     //Get ID from JWT
@@ -49,13 +59,52 @@ export class GameController {
     const { name } = req.body;
 
     //Get user from the database
-    const userRepository = getRepository(User);
-    let user: User;
+    const gameRepository = getRepository(Game);
+    let game: Game;
     try {
-      user = await userRepository.find(userId);
+      game = await gameRepository.findOne({
+        relations: ['user'],
+        where: {
+          id: id,
+          user: userId,
+        },
+      });
     } catch (id) {
       res.status(401).send();
     }
+    game.name = name;
+    const errors = await validate(game);
+    if (errors.length > 0) {
+      res.status(400).send(errors);
+      return;
+    }
+    gameRepository.save(game);
+    res.status(200).send(game);
+  }
+
+  @Delete('/:id')
+  @UseBefore(checkJwt)
+  async delete(@Param('id') id: number, @Req() req: Request, @Res() res: Response) {
+    //Get ID from JWT
+    const userId = res.locals.jwtPayload.userId;
+
+    //Get parameters from the body
+
+    //Get user from the database
     const gameRepository = getRepository(Game);
+    let game: Game;
+    try {
+      game = await gameRepository.findOne({
+        relations: ['user'],
+        where: {
+          id: id,
+          user: userId,
+        },
+      });
+    } catch (id) {
+      res.status(401).send();
+    }
+    gameRepository.delete(game);
+    res.status(200).send();
   }
 }
