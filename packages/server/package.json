@@ -1,0 +1,33 @@
+{
+  "name": "@hiscore/server",
+  "version": "1.0.0",
+  "description": "a high score api using typescript and nodejs",
+  "main": "dist/server.js",
+  "repository": "git@github.com:antomarsi/hiscore-api.git",
+  "author": "Antônio Marco da Silva <antonio.silva@bludata.com.br>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/jsonwebtoken": "^8.5.0",
+    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.3.0",
+    "pg-hstore": "^2.3.3",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.3.3",
+    "sequelize-typescript": "^1.1.0"
+  },
+  "scripts": {
+    "start": "tsnd --ignore node_modules --transpile-only --no-notify --respawn src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.7",
+    "@types/validator": "^13.1.0",
+    "sequelize-cli": "^6.2.0",
+    "ts-node-dev": "^1.0.0-pre.52"
+  }
+}

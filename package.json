@@ -1,58 +1,18 @@
 {
-  "name": "hiscore-api",
+  "name": "hiscore",
   "version": "1.0.0",
-  "description": "a high score api using typescript and nodejs",
-  "main": "dist/server.js",
+  "main": "index.js",
   "repository": "git@github.com:antomarsi/hiscore-api.git",
   "author": "Antônio Marco da Silva <antonio.silva@bludata.com.br>",
   "license": "MIT",
-  "dependencies": {
-    "@types/morgan": "^1.9.1",
-    "bcryptjs": "^2.4.3",
-    "class-transformer": "^0.2.3",
-    "class-validator": "^0.12.2",
-    "class-validator-jsonschema": "^2.0.2",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "helmet": "^3.23.3",
-    "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.5.9",
-    "morgan": "^1.10.0",
-    "reflect-metadata": "^0.1.13",
-    "routing-controllers": "^0.9.0-alpha.6",
-    "routing-controllers-openapi": "^2.0.1",
-    "swagger-ui-express": "^4.1.4",
-    "typeorm": "^0.2.25"
-  },
-  "scripts": {
-    "start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
-    "start:watch": "yarn nodemon",
-    "build": "tsc"
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/cors": "^2.8.6",
-    "@types/helmet": "^0.0.47",
-    "@types/jsonwebtoken": "^8.5.0",
-    "@types/node": "^14.0.26",
-    "@types/swagger-ui-express": "^4.1.2",
-    "eslint": "^7.5.0",
-    "eslint-plugin-import": "^2.22.0",
-    "nodemon": "^2.0.4",
-    "ts-node": "^8.10.2",
+    "@hiscore/eslint-config": "*",
     "typescript": "^3.9.7"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "**/*.test.ts",
-      "**/*.spec.ts",
-      ".git",
-      "node_modules"
-    ],
-    "watch": [
-      "src"
-    ],
-    "exec": "npm start",
-    "ext": "ts"
   }
 }
