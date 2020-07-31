@@ -3,7 +3,8 @@ services:
   api:
     build:
       context: .
-    image: base-image
+    working_dir: /app/packages/server
+    command: ["yarn", "start"]
     links:
       - db
     depends_on:
@@ -24,12 +25,16 @@ services:
   web:
     build:
       context: .
+    working_dir: /app/packages/web
+    command: ["yarn", "start"]
+    environment:
+      NODE_ENV: development
     links:
       - api
     depends_on:
       - api
     ports:
-      - 4000:4000
+      - 3334:4000
     volumes:
       - .:/app
     tty: true
@@ -40,7 +45,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: db
+      POSTGRES_DB: hiscore
     ports:
       - 5432:5432
 

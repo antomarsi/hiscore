@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken'
 import auth from '../config/auth'
 import IControllerBase from './IController'
 import { getRepository } from 'typeorm'
-import { User } from 'database/entity/User'
+import { User } from '../database/entity/User'
 
 class AuthController implements IControllerBase {
   public path = '/'

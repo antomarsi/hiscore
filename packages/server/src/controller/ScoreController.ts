@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express'
 import IControllerBase from './IController'
-import { checkApiKey } from 'middlewares/checkApiKey'
+import { checkApiKey } from '../middlewares/checkApiKey'
 import { getRepository } from 'typeorm'
-import { Score } from 'database/entity/Score'
-import { Game } from 'database/entity/Game'
+import { Score } from '../database/entity/Score'
+import { Game } from '../database/entity/Game'
 
 class ScoreController implements IControllerBase {
   public path = '/score'

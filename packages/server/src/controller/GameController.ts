@@ -2,8 +2,8 @@ import { checkJwt } from '../middlewares/checkJwt'
 import { Request, Response, Router } from 'express'
 import IControllerBase from './IController'
 import { getRepository } from 'typeorm'
-import { User } from 'database/entity/User'
-import { Game } from 'database/entity/Game'
+import { User } from '../database/entity/User'
+import { Game } from '../database/entity/Game'
 
 class GameController implements IControllerBase {
   public path = '/game'

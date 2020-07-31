@@ -5,11 +5,6 @@ import api from '@hiscore/axios-config'
 // import { Container } from './styles';
 
 const App: React.FC = () => {
-  useEffect(() => {
-    api.get('/').then(response => {
-      console.log(response)
-    })
-  }, [])
 
   return <h1>Hello World</h1>
 }
