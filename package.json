@@ -6,11 +6,9 @@
   "author": "Antônio Marco da Silva <antonio.silva@bludata.com.br>",
   "license": "MIT",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@hiscore/eslint-config": "*",
     "typescript": "^3.9.7"

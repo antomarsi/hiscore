@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import * as jwt from 'jsonwebtoken'
-import auth from '@config/auth'
-
-const { JWT_SECRET } = process.env
+import auth from '../config/auth'
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   //Get the jwt token from the head

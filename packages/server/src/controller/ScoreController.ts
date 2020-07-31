@@ -1,19 +1,36 @@
-import { Request, Response } from 'express'
-import Game from 'database/models/Game'
-import Score from 'database/models/Score'
+import { Request, Response, Router } from 'express'
+import IControllerBase from './IController'
+import { checkApiKey } from 'middlewares/checkApiKey'
+import { getRepository } from 'typeorm'
+import { Score } from 'database/entity/Score'
+import { Game } from 'database/entity/Game'
 
-export class ScoreController {
+class ScoreController implements IControllerBase {
+  public path = '/score'
+  public router = Router()
+
+  constructor() {
+    this.initRoutes()
+  }
+
+  public initRoutes() {
+    this.router.post('/', checkApiKey, this.index)
+    this.router.put('/', checkApiKey, this.store)
+  }
+
   public async index(req: Request, res: Response) {
     const gameId = res.locals.jwtPayload.gameId
 
-    //Get user from the database
-    const game = await Game.findByPk(gameId, {
-      include: [Score],
+    const scores = await getRepository(Score).find({
+      where: {
+        gameId
+      },
+      order: {
+        score: 'DESC'
+      }
     })
-    if (!game) {
-      return res.status(400).json({ error: 'Game not found' })
-    }
-    return res.status(200).send(game.scores)
+
+    return res.status(200).send(scores)
   }
 
   public async store(req: Request, res: Response) {
@@ -23,15 +40,16 @@ export class ScoreController {
     const { player, score: scoreValue } = req.body
 
     //Get user from the database
-    const game = await Game.findByPk(gameId)
+    const game = await getRepository(Game).findOneOrFail(gameId)
 
-    if (!game) {
-      return res.status(400).json({ error: 'Game not found' })
-    }
+    var score = new Score()
+    score.game = game
+    score.player = player
+    score.score = scoreValue
+    getRepository(Score).save(score)
 
-    var score = Score.build({ player, score: scoreValue, game })
-
-    score.save()
     res.status(200).send()
   }
 }
+
+export default ScoreController

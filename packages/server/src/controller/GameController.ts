@@ -1,21 +1,39 @@
 import { checkJwt } from '../middlewares/checkJwt'
-import { Request, Response } from 'express'
-import User from 'database/models/User'
-import Game from 'database/models/Game'
+import { Request, Response, Router } from 'express'
+import IControllerBase from './IController'
+import { getRepository } from 'typeorm'
+import { User } from 'database/entity/User'
+import { Game } from 'database/entity/Game'
 
-export class GameController {
+class GameController implements IControllerBase {
+  public path = '/game'
+  public router = Router()
+
+  constructor() {
+    this.initRoutes()
+  }
+
+  public initRoutes() {
+    this.router.post('/', checkJwt, this.store)
+    this.router.put('/:id', checkJwt, this.update)
+    this.router.delete('/:id', checkJwt, this.destroy)
+  }
+
   public async store(req: Request, res: Response) {
     //Get ID from JWT
     const id = res.locals.jwtPayload.userId
 
     //Get parameters from the body
     const { name } = req.body
-
+    const userRepository = getRepository(User)
+    const gameRepository = getRepository(Game)
+    const user = await userRepository.findOneOrFail(id)
     //Get user from the database
-    const user = await User.findByPk(id)
-    const game = Game.build({ name, user })
+    const game = new Game()
+    game.name = name
+    game.user = user
 
-    game.save()
+    gameRepository.save(game)
 
     return res.status(204).json(game)
   }
@@ -27,14 +45,12 @@ export class GameController {
     const { name } = req.body
     const { id } = req.query
 
-    //Get user from the database
-    let game = await Game.findOne({ where: { id, userId } })
-    if (!game) {
-      return res.status(400).json({ error: 'Game not found' })
-    }
+    const gameRepository = getRepository(Game)
 
+    //Get user from the database
+    let game = await gameRepository.findOneOrFail({ where: { id, userId } })
     game.name = name
-    game.save()
+    gameRepository.save(game)
 
     res.status(200).json(game)
   }
@@ -44,15 +60,14 @@ export class GameController {
     const userId = res.locals.jwtPayload.userId
 
     //Get parameters from the body
-    const { name } = req.body
     const { id } = req.query
+    const gameRepository = getRepository(Game)
 
     //Get user from the database
-    let game = await Game.findOne({ where: { id, userId } })
-    if (!game) {
-      return res.status(400).json({ error: 'Game not found' })
-    }
-    game.destroy()
+    let game = await gameRepository.findOneOrFail({ where: { id, userId } })
+    gameRepository.delete(game)
     res.status(200).json()
   }
 }
+
+export default GameController
