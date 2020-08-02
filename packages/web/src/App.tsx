@@ -1,12 +1,17 @@
+import React from 'react'
+import { Provider } from 'react-redux'
+import Routes from './routes'
+import store from './store'
+import { PersistGate } from 'redux-persist/integration/react'
 
-import React, { useEffect } from 'react'
-import api from '@hiscore/axios-config'
-
-// import { Container } from './styles';
-
-const App: React.FC = () => {
-
-  return <h1>Hello World</h1>
+function App() {
+  return (
+    <Provider store={store.store}>
+      <PersistGate loading={null} persistor={store.persistor}>
+        <Routes />
+      </PersistGate>
+    </Provider>
+  )
 }
 
 export default App

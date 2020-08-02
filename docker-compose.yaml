@@ -4,7 +4,6 @@ services:
     build:
       context: .
     working_dir: /app/packages/server
-    command: ["yarn", "start"]
     links:
       - db
     depends_on:
@@ -26,15 +25,13 @@ services:
     build:
       context: .
     working_dir: /app/packages/web
-    command: ["yarn", "start"]
-    environment:
-      NODE_ENV: development
     links:
       - api
     depends_on:
       - api
     ports:
-      - 3334:4000
+      - 3000:3000
+      - 35729:35729
     volumes:
       - .:/app
     tty: true

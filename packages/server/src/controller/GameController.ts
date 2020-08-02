@@ -21,13 +21,11 @@ class GameController implements IControllerBase {
 
   public async store(req: Request, res: Response) {
     //Get ID from JWT
-    const id = res.locals.jwtPayload.userId
+    const { user } = res.locals.jwtPayload
 
     //Get parameters from the body
     const { name } = req.body
-    const userRepository = getRepository(User)
     const gameRepository = getRepository(Game)
-    const user = await userRepository.findOneOrFail(id)
     //Get user from the database
     const game = new Game()
     game.name = name
@@ -39,7 +37,7 @@ class GameController implements IControllerBase {
   }
   public async update(req: Request, res: Response) {
     //Get ID from JWT
-    const userId = res.locals.jwtPayload.userId
+    const { user } = res.locals.jwtPayload
 
     //Get parameters from the body
     const { name } = req.body
@@ -48,7 +46,9 @@ class GameController implements IControllerBase {
     const gameRepository = getRepository(Game)
 
     //Get user from the database
-    let game = await gameRepository.findOneOrFail({ where: { id, userId } })
+    let game = await gameRepository.findOneOrFail({
+      where: { id, userId: user.id }
+    })
     game.name = name
     gameRepository.save(game)
 
