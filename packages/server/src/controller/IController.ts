@@ -1,5 +1,5 @@
 interface IControllerBase {
-  initRoutes(): any
+  initRoutes(passport?: any): any
 }
 
 export default IControllerBase
