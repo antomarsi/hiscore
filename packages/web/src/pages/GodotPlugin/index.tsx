@@ -6,7 +6,7 @@ import { Row } from 'react-bootstrap'
 const GodotPlugin: React.FC = () => {
   return (
     <Row>
-      <h1>Teste</h1>
+      <h1>This is where you can download the plugin for the Godot Engine</h1>
     </Row>
   )
 }

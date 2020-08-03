@@ -9,7 +9,7 @@ const Header: React.FC = () => {
     (state: ApplicationState) => state.auth.data
   )
   return (
-    <Navbar variant="dark" bg="dark" className="flex-md-nowrap p-0">
+    <Navbar variant="dark" bg="dark" fixed="top" className="flex-md-nowrap p-0">
       <Navbar.Brand as={Link} to="/" className="col-sm-3 col-md-2 mr-0">
         Antomarsi Hiscore
       </Navbar.Brand>

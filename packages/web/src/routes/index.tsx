@@ -21,7 +21,7 @@ const Routes: React.SFC<{}> = props => {
   return (
     <ConnectedRouter history={history}>
       <Header />
-      <Container fluid>
+      <Container fluid className="h-100">
         <Switch location={location}>
           <UnloggedRoute exact path="/" component={Home} />
           <UnloggedRoute exact path="/login" component={LoginPage} />
