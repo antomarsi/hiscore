@@ -9,10 +9,8 @@ import {
   Generated
 } from 'typeorm'
 import { Length } from 'class-validator'
-import * as crypto from 'crypto'
 import { User } from './User'
-import { Score } from './Score'
-import * as jwt from 'jsonwebtoken'
+import { Leaderboard } from './Leaderboard'
 
 @Entity()
 export class Game {
@@ -27,6 +25,9 @@ export class Game {
   @Generated('uuid')
   apiKey: string
 
+  @Column({ type: 'bool', default: false })
+  useAuthentication: boolean = false
+
   @Column()
   @CreateDateColumn()
   createdAt: Date
@@ -38,6 +39,6 @@ export class Game {
   @ManyToOne(type => User, user => user.games)
   user: User
 
-  @OneToMany(type => Score, score => score.game)
-  scores: Score[]
+  @OneToMany(type => Leaderboard, leaderboard => leaderboard.game)
+  leaderboards: Leaderboard[]
 }

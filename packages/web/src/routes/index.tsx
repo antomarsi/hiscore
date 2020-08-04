@@ -12,7 +12,8 @@ import About from './../pages/About'
 import GodotPlugin from './../pages/GodotPlugin'
 import Github from './../pages/Github'
 import Home from './../pages/Home/index'
-import UnloggedRoute from './UnloggedRoute'
+import PrivateRoute from './PrivateRoute'
+import Dashboard from 'src/pages/Dashboard'
 
 const Routes: React.SFC<{}> = props => {
   const location = useSelector(
@@ -23,11 +24,12 @@ const Routes: React.SFC<{}> = props => {
       <Header />
       <Container fluid className="h-100">
         <Switch location={location}>
-          <UnloggedRoute exact path="/" component={Home} />
-          <UnloggedRoute exact path="/login" component={LoginPage} />
-          <UnloggedRoute exact path="/about" component={About} />
-          <UnloggedRoute exact path="/github" component={Github} />
-          <UnloggedRoute exact path="/godot-plugin" component={GodotPlugin} />
+          <PrivateRoute exact path="dashboard" component={Dashboard} />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/about" component={About} />
+          <Route exact path="/github" component={Github} />
+          <Route exact path="/godot-plugin" component={GodotPlugin} />
           <Route path="*" component={NotFoundPage} />
         </Switch>
       </Container>

@@ -4,15 +4,12 @@ import GameController from './controller/GameController'
 
 import { Router } from 'express'
 
-const controllers = [
-  new AuthController(),
-  new GameController(),
-  new ScoreController()
-]
+const controllersV1 = [AuthController, GameController, ScoreController]
 
 const routes = Router()
-controllers.forEach(controller => {
-  routes.use("/", controller.router);
+
+controllersV1.forEach(controller => {
+  routes.use(`/v1${controller.path}`, new controller().router)
 })
 
-export default routes;
+export default routes

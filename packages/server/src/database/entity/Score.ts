@@ -1,17 +1,34 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { Game } from './Game'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany
+} from 'typeorm'
+import { Leaderboard } from './Leaderboard'
+import { Player } from './Player'
+import { MaxLength } from 'class-validator'
 
-@Entity({ orderBy: { order: 'DESC' } })
+@Entity()
 export class Score {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ length: 20 })
-  player: string
+  @ManyToOne(type => Player, player => player.scores, {
+    nullable: true,
+    onDelete: 'CASCADE'
+  })
+  player: Player
+
+  @Column({nullable: true})
+  @MaxLength(20)
+  player_name: string;
 
   @Column()
   score: number
 
-  @ManyToOne(type => Game, game => game.scores, { onDelete: 'CASCADE' })
-  game: Game
+  @ManyToOne(type => Leaderboard, leaderboard => leaderboard.scores, {
+    onDelete: 'CASCADE'
+  })
+  leaderboard: Leaderboard
 }

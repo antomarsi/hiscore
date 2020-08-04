@@ -1,21 +1,24 @@
 import { Request, Response, Router } from 'express'
 import IControllerBase from './IController'
-import { checkApiKey } from '../middlewares/checkApiKey'
 import { getRepository } from 'typeorm'
 import { Score } from '../database/entity/Score'
 import { Game } from '../database/entity/Game'
+import passport from 'passport'
 
-class ScoreController implements IControllerBase {
-  public path = '/score'
-  public router = Router()
-
-  constructor() {
-    this.initRoutes()
-  }
+class ScoreController extends IControllerBase {
+  public static path = '/score'
 
   public initRoutes() {
-    this.router.post('/', checkApiKey, this.index)
-    this.router.put('/', checkApiKey, this.store)
+    this.router.post(
+      '/',
+      passport.authenticate('gameApiKey', { session: false }),
+      this.index
+    )
+    this.router.put(
+      '/',
+      passport.authenticate('gameApiKey', { session: false }),
+      this.store
+    )
   }
 
   public async index(req: Request, res: Response) {
@@ -43,7 +46,7 @@ class ScoreController implements IControllerBase {
     const game = await getRepository(Game).findOneOrFail(gameId)
 
     var score = new Score()
-    score.game = game
+    score.leaderboard = leaderboard
     score.player = player
     score.score = scoreValue
     getRepository(Score).save(score)

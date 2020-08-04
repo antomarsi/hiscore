@@ -7,19 +7,19 @@ import {
   UpdateDateColumn,
   OneToMany
 } from 'typeorm'
-import { Length, IsNotEmpty, IsEmail } from 'class-validator'
-import * as bcrypt from 'bcryptjs'
 import { Game } from './Game'
 
 @Entity()
-@Unique(['email'])
+@Unique(['googleId', 'githubId'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
-  @IsNotEmpty()
   googleId: string
+
+  @Column()
+  githubId: string
 
   @Column()
   @CreateDateColumn()
