@@ -25,14 +25,15 @@ class AuthController extends IControllerBase {
     )
     this.router.get(
       '/google/callback',
-      passport.authenticate('google', (req, res) => {
+      passport.authenticate('google', { failureRedirect: '/' }),
+      (req: Request, res: Response) => {
         res.redirect('/home')
-      })
+      }
     )
 
     this.router.get('/user')
 
-    app.get('/logout', (req, res) => {
+    this.router.get('/logout', (req, res) => {
       console.log('loginout')
       req.logout()
       res.redirect('/')

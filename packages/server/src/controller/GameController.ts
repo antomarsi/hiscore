@@ -4,7 +4,7 @@ import IControllerBase from './IController'
 import { getRepository } from 'typeorm'
 import { User } from '../database/entity/User'
 import { Game } from '../database/entity/Game'
-import { Leaderboard } from 'database/entity/Leaderboard'
+import { Leaderboard } from '../database/entity/Leaderboard'
 
 class GameController extends IControllerBase {
   public static path = '/game'

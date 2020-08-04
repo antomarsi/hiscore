@@ -8,9 +8,9 @@ module.exports = {
   password: process.env.PG_PASS,
   database: process.env.PG_DB,
   synchronize: true,
-  entities: ['src/database/entity/*.js'],
-  subscribers: ['src/database/subscriber/*.js'],
-  migrations: ['src/database/migration/*.js'],
+  entities: ['src/database/entity/*.ts'],
+  subscribers: ['src/database/subscriber/*.ts'],
+  migrations: ['src/database/migration/*.ts'],
   cli: {
     entitiesDir: 'src/database/entity',
     migrationsDir: 'src/database/migration',

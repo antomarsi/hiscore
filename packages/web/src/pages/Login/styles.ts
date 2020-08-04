@@ -1,9 +1,5 @@
 import styled from 'styled-components'
-import {
-  Container as BootContainer,
-  FormControl as BootFormControl,
-  Form
-} from 'react-bootstrap'
+import { Container as BootContainer } from 'react-bootstrap'
 
 export const Container = styled.div`
   display: -ms-flexbox;
@@ -21,29 +17,9 @@ export const Container = styled.div`
   height: 100%;
   text-align: center;
 `
-export const FormSignIn = styled(Form)`
+export const FormSignIn = styled.div`
   width: 100%;
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
-`
-export const FormControl = styled(BootFormControl)`
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
-  &:focus {
-    z-index: 2;
-  }
-  input[type='email'] {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  input[type='password'] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
 `

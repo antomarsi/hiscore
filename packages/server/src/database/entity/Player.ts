@@ -14,7 +14,7 @@ export class Player {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ length: 20 })
+  @Column()
   @MaxLength(20)
   @IsNotEmpty()
   displayName: string
@@ -28,7 +28,7 @@ export class Player {
   @IsNotEmpty()
   password: string
 
-  @Column({ type: 'simple-json', nullable: true, length: 255 })
+  @Column({ type: 'simple-json', nullable: true })
   data: any
 
   @OneToMany(type => Score, score => score.player)

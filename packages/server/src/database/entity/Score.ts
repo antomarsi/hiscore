@@ -2,8 +2,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne,
-  OneToMany
+  ManyToOne
 } from 'typeorm'
 import { Leaderboard } from './Leaderboard'
 import { Player } from './Player'

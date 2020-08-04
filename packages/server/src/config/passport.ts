@@ -1,16 +1,16 @@
 import { OAuth2Strategy } from 'passport-google-oauth'
 import { getRepository } from 'typeorm'
-import { User } from 'database/entity/User'
 import { GOOGLE, GITHUB } from './auth'
 import { Strategy as GithubStrategy } from 'passport-github'
 import { Strategy as BearerStrategy } from 'passport-http-bearer'
-import { Game } from 'database/entity/Game'
+import { User } from '../database/entity/User'
+import { Game } from '../database/entity/Game'
 
 export const googleStrategy = new OAuth2Strategy(
   {
     clientID: GOOGLE.clientId!,
     clientSecret: GOOGLE.clientSecret!,
-    callbackURL: '/auth/google/callback'
+    callbackURL: process.env.APP_URL + '/api/v1/auth/google/callback'
   },
   (accessToken, refreshToken, profile, done) => {
     const userRepository = getRepository(User)
@@ -34,7 +34,7 @@ export const githubStrategy = new GithubStrategy(
   {
     clientID: GITHUB.clientId!,
     clientSecret: GITHUB.clientSecret!,
-    callbackURL: '/auth/github/callback'
+    callbackURL: process.env.APP_URL + '/api/v1/auth/github/callback'
   },
   (accessToken, refreshToken, profile, done) => {
     const userRepository = getRepository(User)

@@ -8,7 +8,7 @@ const database: ConnectionOptions = {
   username: process.env.PG_USER,
   password: process.env.PG_PASS,
   database: process.env.PG_DB,
-  synchronize: true,
+  synchronize: process.env.DB_SYNC === 'true' || false,
   entities: [resolve(__dirname, '..', 'database', 'entity', '*.ts')],
   subscribers: [resolve(__dirname, '..', 'database', 'subscriber', '*.ts')],
   migrations: [resolve(__dirname, '..', 'database', 'migration', '*.ts')]

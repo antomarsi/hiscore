@@ -7,8 +7,8 @@ import {
   googleStrategy,
   githubStrategy,
   bearerGameStrategy
-} from 'config/passport'
-import { User } from 'database/entity/User'
+} from './config/passport'
+import { User } from './database/entity/User'
 import { getRepository } from 'typeorm'
 
 const app = express()
