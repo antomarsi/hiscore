@@ -1,7 +1,7 @@
 import { OAuth2Strategy } from 'passport-google-oauth'
 import { getRepository, getCustomRepository } from 'typeorm'
 import { GOOGLE, GITHUB } from './auth'
-import { Strategy as GithubStrategy } from 'passport-github'
+import { Strategy as GithubStrategy } from 'passport-github2'
 import { Strategy as BearerStrategy } from 'passport-http-bearer'
 import { Game } from '../database/entity/Game'
 import { UserRepository } from './../database/repository/UserRepository'
@@ -14,22 +14,20 @@ export const googleStrategy = new OAuth2Strategy(
     callbackURL: GOOGLE.callbackURL
   },
   (accessToken, refreshToken, profile, done) => {
-    console.log(accessToken);
+    console.log(accessToken)
     getCustomRepository(UserRepository)
       .upsertGoogleUser(accessToken, refreshToken, profile)
       .then(user => done(null, user))
       .catch(err => done(err))
   }
 )
-console.log(GITHUB.callbackURL)
 export const githubStrategy = new GithubStrategy(
   {
-    clientID: GITHUB.clientId!,
-    clientSecret: GITHUB.clientSecret!,
-    callbackURL: GITHUB.callbackURL
+    clientID: GITHUB.clientId,
+    clientSecret: GITHUB.clientSecret,
+    callbackURL: 'http://localhost:3333/api/v1/auth/github/callback'
   },
   (accessToken, refreshToken, profile, done) => {
-    console.log(accessToken);
     getCustomRepository(UserRepository)
       .upsertGithubUser(accessToken, refreshToken, profile)
       .then(user => done(null, user))

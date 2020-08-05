@@ -1,15 +1,15 @@
-const url = process.env.API_URL || "http://localhost:3333"
+const url = process.env.API_URL || 'http://localhost:3333'
 
 export const GITHUB = {
-  clientId: process.env.PASSPORT_GITHUB_CLIENT_ID,
-  clientSecret: process.env.PASSPORT_GITHUB_CLIENT_SECRET,
-  callbackURL: url + '/api/v1/auth/github'
+  clientId: process.env.PASSPORT_GITHUB_CLIENT_ID || '',
+  clientSecret: process.env.PASSPORT_GITHUB_CLIENT_SECRET || '',
+  callbackURL: url + '/api/v1/auth/github/callback'
 }
 
 export const GOOGLE = {
   clientId: process.env.PASSPORT_GOOGLE_CLIENT_ID,
   clientSecret: process.env.PASSPORT_GOOGLE_CLIENT_SECRET,
-  callbackURL: url + '/api/v1/auth/google/callback'
+  callbackURL: url + '/api/v1/auth/google'
 }
 
 export default {

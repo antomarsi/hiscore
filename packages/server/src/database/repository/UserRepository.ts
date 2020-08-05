@@ -1,7 +1,7 @@
 import { EntityRepository, Repository, getRepository } from 'typeorm'
 import { User } from '../entity/User'
 import { Profile as GoogleProfile } from 'passport-google-oauth'
-import { Profile as GithubProfile } from 'passport-github'
+import { Profile as GithubProfile } from 'passport-github2'
 import {
   SocialProvider,
   SOCIAL_PROVIDER_TYPE
@@ -26,10 +26,15 @@ export class UserRepository extends Repository<User> {
         .then(socialProvider => {
           return resolve(socialProvider.user)
         })
-        .catch(error => {
-          var newUser = new User()
-          newUser.displayName = profile.displayName
-          newUser.email = profile.emails![0].value
+        .catch(async error => {
+          var newUser = await this.findOne({
+            where: { email: profile.emails![0].value }
+          })
+          if (!newUser) {
+            newUser = new User()
+            newUser.displayName = profile.displayName
+            newUser.email = profile.emails![0].value
+          }
           var newProvider = new SocialProvider()
           newProvider.providerId = profile.id
           newProvider.accessKey = accessToken
@@ -68,7 +73,7 @@ export class UserRepository extends Repository<User> {
           newProvider.providerId = profile.id
           newProvider.accessKey = accessToken
           newProvider.provider = SOCIAL_PROVIDER_TYPE.GITHUB
-          newUser.providers.push(newProvider)
+          newUser.providers = [newProvider]
 
           return this.save(newUser)
             .then(user => resolve(user))

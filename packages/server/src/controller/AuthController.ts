@@ -3,14 +3,22 @@ import IControllerBase from './IController'
 import { User } from '../database/entity/User'
 import passport from 'passport'
 import { generateToken, sendToken } from './../middlewares/jwt'
-import { GOOGLE, GITHUB } from './../config/auth'
 
 class AuthController extends IControllerBase {
   public static path: string = '/auth'
 
   public initRoutes() {
     // GITHUB auth
+
+    this.router.get('/github', passport.authenticate('github'))
+
     this.router.get(
+      '/github/callback',
+      passport.authenticate('github', { failureRedirect: '/login' }),
+      generateToken,
+      sendToken
+    )
+    /*this.router.get(
       '/github',
       passport.authenticate('github', {
         session: false
@@ -24,13 +32,7 @@ class AuthController extends IControllerBase {
       },
       generateToken,
       sendToken
-    )
-    this.router.get(
-      '/github/callback',
-      passport.authenticate('github', (req, res) => {
-        console.log(GITHUB.callbackURL)
-      })
-    )
+    )*/
 
     // GOOGLE auth
     this.router.get(
@@ -50,7 +52,10 @@ class AuthController extends IControllerBase {
 
     this.router.get(
       '/google/callback',
-      passport.authenticate('google', { failureRedirect: '/login' }),
+      passport.authenticate('google', {
+        failureRedirect: '/login',
+        session: false
+      }),
       (req: Request, res: Response) => {
         res.redirect('/login/success')
       }

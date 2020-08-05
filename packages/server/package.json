@@ -17,7 +17,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
-    "passport-github": "^1.1.0",
+    "passport-github2": "^0.1.12",
     "passport-google-oauth": "^2.0.0",
     "passport-http-bearer": "^1.0.1",
     "pg": "^8.3.0",
@@ -25,7 +25,7 @@
     "typeorm": "^0.2.25"
   },
   "scripts": {
-    "start": "tsnd --ignore node_modules --transpile-only --no-notify --respawn src/index.ts"
+    "start": "tsnd --ignore node_modules --transpile-only --no-notify --inspect=0.0.0.0:5858 --respawn src/index.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -35,7 +35,7 @@
     "@types/helmet": "^0.0.47",
     "@types/morgan": "^1.9.1",
     "@types/passport": "^1.0.4",
-    "@types/passport-github": "^1.1.5",
+    "@types/passport-github2": "^1.2.4",
     "@types/passport-google-oauth": "^1.0.41",
     "@types/passport-http-bearer": "^1.0.35",
     "@types/validator": "^13.1.0",

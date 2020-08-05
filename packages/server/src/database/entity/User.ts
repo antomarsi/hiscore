@@ -2,7 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  Unique,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany
@@ -11,7 +10,6 @@ import { Game } from './Game'
 import { SocialProvider } from './SocialProvider'
 
 @Entity()
-@Unique(['email'])
 export class User{
   @PrimaryGeneratedColumn()
   id: number

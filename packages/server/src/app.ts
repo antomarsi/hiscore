@@ -19,7 +19,7 @@ app.use(express.json())
 
 // CORS AND SECURITY
 app.use(cors())
-app.use(helmet())
+//app.use(helmet())
 app.use(morgan("dev"))
 
 // PASSPORT

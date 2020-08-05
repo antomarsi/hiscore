@@ -1,19 +1,16 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
       "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true,
-      "trace": "all",
-      "program": "${workspaceFolder}/dist/server.js",
-      "preLaunchTask": "tsc: build - tsconfig.json",
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+      "request": "attach",
+      "name": "Docker: Attach to Node",
+      "protocol": "auto",
+      "port": 5858,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "outFiles": ["${workspaceFolder}/packages/server/dist/**/*.js"],
+      "skipFiles": ["<node_internals>/**/*.js"]
     }
   ]
 }
