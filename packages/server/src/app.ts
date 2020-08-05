@@ -6,7 +6,8 @@ import passport from 'passport'
 import {
   googleStrategy,
   githubStrategy,
-  bearerGameStrategy
+  bearerGameStrategy,
+  bearerUserStrategy
 } from './config/passport'
 import { User } from './database/entity/User'
 import { getRepository } from 'typeorm'
@@ -34,6 +35,7 @@ passport.deserializeUser((id: number, done) => {
 passport.use(githubStrategy)
 passport.use(googleStrategy)
 passport.use('gameApiKey', bearerGameStrategy)
+passport.use('user-jwt', bearerUserStrategy)
 
 app.use(passport.initialize())
 app.use(passport.session())

@@ -15,8 +15,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "typeRoots": ["./src/types"]
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "types"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

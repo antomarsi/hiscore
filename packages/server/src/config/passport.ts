@@ -1,60 +1,46 @@
 import { OAuth2Strategy } from 'passport-google-oauth'
-import { getRepository } from 'typeorm'
+import { getRepository, getCustomRepository } from 'typeorm'
 import { GOOGLE, GITHUB } from './auth'
 import { Strategy as GithubStrategy } from 'passport-github'
 import { Strategy as BearerStrategy } from 'passport-http-bearer'
-import { User } from '../database/entity/User'
 import { Game } from '../database/entity/Game'
+import { UserRepository } from './../database/repository/UserRepository'
+import { checkJwt } from './../middlewares/jwt'
 
 export const googleStrategy = new OAuth2Strategy(
   {
     clientID: GOOGLE.clientId!,
     clientSecret: GOOGLE.clientSecret!,
-    callbackURL: process.env.APP_URL + '/api/v1/auth/google/callback'
+    callbackURL: GOOGLE.callbackURL
   },
   (accessToken, refreshToken, profile, done) => {
-    const userRepository = getRepository(User)
-
-    return userRepository
-      .findOneOrFail({ googleId: profile.id })
-      .then(user => {
-        return done(null, user)
-      })
-      .catch(err => {
-        let user = new User()
-        user.googleId = profile.id
-        userRepository.save(user).then(user => {
-          return done(null, user)
-        })
-      })
+    getCustomRepository(UserRepository)
+      .upsertGoogleUser(accessToken, refreshToken, profile)
+      .then(user => done(null, user))
+      .catch(err => done(err))
   }
 )
 
 export const githubStrategy = new GithubStrategy(
   {
     clientID: GITHUB.clientId!,
-    clientSecret: GITHUB.clientSecret!,
-    callbackURL: process.env.APP_URL + '/api/v1/auth/github/callback'
+    clientSecret: GITHUB.clientSecret!
   },
   (accessToken, refreshToken, profile, done) => {
-    const userRepository = getRepository(User)
-
-    return userRepository
-      .findOneOrFail({ googleId: profile.id })
-      .then(user => {
-        return done(null, user)
-      })
-      .catch(err => {
-        let user = new User()
-        user.githubId = profile.id
-        userRepository.save(user).then(user => {
-          return done(null, user)
-        })
-      })
+    getCustomRepository(UserRepository)
+      .upsertGithubUser(accessToken, refreshToken, profile)
+      .then(user => done(null, user))
+      .catch(err => done(err))
   }
 )
 
-export const bearerGameStrategy = new BearerStrategy(function (token, done) {
+export const bearerUserStrategy = new BearerStrategy((token, done) => {
+  checkJwt(token)
+    .then(user => done(null, user))
+    .catch(err => done(err))
+})
+
+export const bearerGameStrategy = new BearerStrategy((token, done) => {
   getRepository(Game)
     .findOneOrFail({ apiKey: token })
     .then(game => done(null, game))

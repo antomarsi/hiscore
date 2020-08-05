@@ -8,18 +8,19 @@ import {
   OneToMany
 } from 'typeorm'
 import { Game } from './Game'
+import { SocialProvider } from './SocialProvider'
 
 @Entity()
 @Unique(['googleId', 'githubId'])
-export class User {
+export class User{
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ nullable: true })
-  googleId: string
+  @Column()
+  displayName: string
 
-  @Column({ nullable: true })
-  githubId: string
+  @Column()
+  email: string
 
   @Column()
   @CreateDateColumn()
@@ -31,4 +32,7 @@ export class User {
 
   @OneToMany(type => Game, game => game.user)
   games: Game[]
+
+  @OneToMany(type => SocialProvider, provider => provider.user)
+  providers: SocialProvider[]
 }
