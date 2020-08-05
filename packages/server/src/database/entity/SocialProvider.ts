@@ -2,7 +2,8 @@ import {
   Entity,
   Column,
   Unique,
-  ManyToOne
+  ManyToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm'
 import { User } from './User';
 
@@ -14,9 +15,11 @@ export enum SOCIAL_PROVIDER_TYPE {
 @Entity()
 @Unique(['accessKey', 'provider'])
 export class SocialProvider {
+  @PrimaryGeneratedColumn()
+  id: number
 
   @Column({nullable: false})
-  id: string
+  providerId: string
 
   @Column({ nullable: false })
   accessKey: string

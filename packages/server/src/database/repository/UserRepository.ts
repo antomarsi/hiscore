@@ -31,7 +31,7 @@ export class UserRepository extends Repository<User> {
           newUser.displayName = profile.displayName
           newUser.email = profile.emails![0].value
           var newProvider = new SocialProvider()
-          newProvider.id = profile.id
+          newProvider.providerId = profile.id
           newProvider.accessKey = accessToken
           newProvider.provider = SOCIAL_PROVIDER_TYPE.GOOGLE
           newUser.providers.push(newProvider)
@@ -65,7 +65,7 @@ export class UserRepository extends Repository<User> {
           newUser.displayName = profile.displayName
           newUser.email = profile.emails![0].value
           var newProvider = new SocialProvider()
-          newProvider.id = profile.id
+          newProvider.providerId = profile.id
           newProvider.accessKey = accessToken
           newProvider.provider = SOCIAL_PROVIDER_TYPE.GITHUB
           newUser.providers.push(newProvider)

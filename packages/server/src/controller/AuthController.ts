@@ -3,6 +3,7 @@ import IControllerBase from './IController'
 import { User } from '../database/entity/User'
 import passport from 'passport'
 import { generateToken, sendToken } from './../middlewares/jwt'
+import { GOOGLE, GITHUB } from './../config/auth'
 
 class AuthController extends IControllerBase {
   public static path: string = '/auth'
@@ -24,14 +25,13 @@ class AuthController extends IControllerBase {
       generateToken,
       sendToken
     )
-    /*
     this.router.get(
       '/github/callback',
       passport.authenticate('github', (req, res) => {
-        res.redirect('/home')
+        console.log(GITHUB.callbackURL)
       })
     )
-    */
+
     // GOOGLE auth
     this.router.get(
       '/google',
@@ -45,21 +45,18 @@ class AuthController extends IControllerBase {
         }
         req.authInfo = { id: (req.user as User).id }
         next()
-      },
-      generateToken,
-      sendToken
-    )
-    /*
-    this.router.get(
-      '/google/callback',
-      passport.authenticate('google', { failureRedirect: '/' }),
-      (req: Request, res: Response) => {
-        res.redirect('/home')
       }
     )
-    */
 
-    this.router.get('/user', passport.authenticate('user-jwt'))
+    this.router.get(
+      '/google/callback',
+      passport.authenticate('google', { failureRedirect: '/login' }),
+      (req: Request, res: Response) => {
+        res.redirect('/login/success')
+      }
+    )
+
+    this.router.get('/me', passport.authenticate('user-jwt'))
     /*
     this.router.get('/logout', (req, res) => {
       console.log('loginout')

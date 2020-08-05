@@ -11,6 +11,7 @@ import {
 } from './config/passport'
 import { User } from './database/entity/User'
 import { getRepository } from 'typeorm'
+import morgan from 'morgan';
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use(express.json())
 // CORS AND SECURITY
 app.use(cors())
 app.use(helmet())
+app.use(morgan("dev"))
 
 // PASSPORT
 passport.serializeUser((user: User, done) => {

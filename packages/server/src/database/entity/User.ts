@@ -11,7 +11,7 @@ import { Game } from './Game'
 import { SocialProvider } from './SocialProvider'
 
 @Entity()
-@Unique(['googleId', 'githubId'])
+@Unique(['email'])
 export class User{
   @PrimaryGeneratedColumn()
   id: number

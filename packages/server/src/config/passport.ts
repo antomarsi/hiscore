@@ -14,19 +14,22 @@ export const googleStrategy = new OAuth2Strategy(
     callbackURL: GOOGLE.callbackURL
   },
   (accessToken, refreshToken, profile, done) => {
+    console.log(accessToken);
     getCustomRepository(UserRepository)
       .upsertGoogleUser(accessToken, refreshToken, profile)
       .then(user => done(null, user))
       .catch(err => done(err))
   }
 )
-
+console.log(GITHUB.callbackURL)
 export const githubStrategy = new GithubStrategy(
   {
     clientID: GITHUB.clientId!,
-    clientSecret: GITHUB.clientSecret!
+    clientSecret: GITHUB.clientSecret!,
+    callbackURL: GITHUB.callbackURL
   },
   (accessToken, refreshToken, profile, done) => {
+    console.log(accessToken);
     getCustomRepository(UserRepository)
       .upsertGithubUser(accessToken, refreshToken, profile)
       .then(user => done(null, user))
