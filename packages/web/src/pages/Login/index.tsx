@@ -1,9 +1,7 @@
 import React from 'react'
 import { Container, FormSignIn } from './styles'
 import { Button, Form } from 'react-bootstrap'
-import { GoogleLogin } from 'react-google-login'
-import GitHubLogin from 'react-github-login'
-import PopupWindow from './LoginPopup'
+import querystring from 'querystring'
 
 const Login: React.FC = () => {
   const onSuccess = (response: any) => {
@@ -13,42 +11,30 @@ const Login: React.FC = () => {
   const onFailure = (response: any) => {
     console.error(response)
   }
-  const teste = () => {
-    const popup = new PopupWindow(
-      'github-auth',
-      'http://localhost:3333/api/v1/auth/github/callback'
-    )
-    popup.then((value: any) => {
-      console.log('return', value)
-    })
-    popup.catch((value: any) => {
-      console.log('catch', value)
-    })
+  const loginGithub = () => {
+    const params = {
+      client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
+      redirect_uri: process.env.REACT_APP_GITHUB_REDIRECT_URL,
+      scope: ["read:user"].join(" ")
+    }
+    console.log(process.env.REACT_APP_GITHUB_REDIRECT_URL)
+    console.log(`https://github.com/login/oauth/authorize?${querystring.stringify(
+      params
+    )}`);
+    window.location.href = `https://github.com/login/oauth/authorize?${querystring.stringify(
+      params
+    )}`
   }
   return (
     <Container>
       <FormSignIn>
         <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <Button size="lg" variant="primary" block onClick={teste}>
+        <Button size="lg" variant="primary" block onClick={loginGithub}>
           Sign in with Github
         </Button>
-        <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}
-          onSuccess={onSuccess}
-          onFailure={onFailure}
-          render={({ onClick, disabled }) => (
-            <Button
-              size="lg"
-              variant="primary"
-              block
-              onClick={onClick}
-              disabled={disabled}
-            >
-              Sign in with Google
-            </Button>
-          )}
-        />
-        ,
+        <Button size="lg" variant="primary" block>
+          Sign in with Google
+        </Button>
       </FormSignIn>
     </Container>
   )

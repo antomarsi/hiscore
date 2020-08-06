@@ -25,7 +25,7 @@ export const githubStrategy = new GithubStrategy(
   {
     clientID: GITHUB.clientId,
     clientSecret: GITHUB.clientSecret,
-    callbackURL: 'http://localhost:3333/api/v1/auth/github/callback'
+    callbackURL: 'http://localhost:3334/login/github/success',
   },
   (accessToken, refreshToken, profile, done) => {
     getCustomRepository(UserRepository)

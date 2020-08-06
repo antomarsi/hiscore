@@ -26,8 +26,7 @@ export const generateToken = (
 }
 
 export const sendToken = (req: Request, res: Response) => {
-  res.setHeader('x-auth-token', req.token!)
-  return res.status(200).json(req.user)
+  return res.status(200).json({ token: req.token!, user: req.user })
 }
 
 export const checkJwt = (token: string): Promise<User> => {

@@ -10,14 +10,13 @@ class AuthController extends IControllerBase {
   public initRoutes() {
     // GITHUB auth
 
-    this.router.get('/github', passport.authenticate('github'))
-
     this.router.get(
-      '/github/callback',
-      passport.authenticate('github', { failureRedirect: '/login' }),
+      '/github',
+      passport.authenticate('github', { session: false }),
       generateToken,
       sendToken
     )
+
     /*this.router.get(
       '/github',
       passport.authenticate('github', {

@@ -6,13 +6,13 @@ import history from './../../../routes/history'
 import { Creators, Types } from './types'
 
 export function* signInWithGoogle({
-  data: { login, password }
+  code
 }: ReturnType<typeof Creators.AUTH_SIGN_IN_REQUEST>) {
   const {
     data: { error, token, user },
     ok
-  } = yield call(api.post, '/auth/signin', { login, password })
-
+  } = yield call(api.get, '/auth/google', { code })
+  console.log(token, user);
   if (ok) {
     yield put(Creators.authSignInSuccess({ token, user }))
 
@@ -24,13 +24,13 @@ export function* signInWithGoogle({
 }
 
 export function* signInWithGithub({
-  data: { login, password }
+  code
 }: ReturnType<typeof Creators.AUTH_SIGN_IN_REQUEST>) {
   const {
     data: { error, token, user },
     ok
-  } = yield call(api.post, '/auth/signin', { login, password })
-
+  } = yield call(api.get, '/auth/github', { code })
+  console.log(token, user);
   if (ok) {
     yield put(Creators.authSignInSuccess({ token, user }))
 
@@ -42,6 +42,6 @@ export function* signInWithGithub({
 }
 
 export const saga = [
-  takeLatest(Types.AUTH_SIGN_IN_REQUEST, signInWithGoogle),
-  takeLatest(Types.AUTH_SIGN_IN_REQUEST, signInWithGithub)
+  takeLatest(Types.AUTH_SIGN_IN_GOOGLE_REQUEST, signInWithGoogle),
+  takeLatest(Types.AUTH_SIGN_IN_GITHUB_REQUEST, signInWithGithub)
 ]
