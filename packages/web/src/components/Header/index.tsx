@@ -7,7 +7,7 @@ import { ApplicationState } from 'src/store'
 const Header: React.FC = () => {
   const authData = useSelector((state: ApplicationState) => state.auth)
   return (
-    <Navbar variant="dark" bg="dark" fixed="top" className="flex-md-nowrap p-0">
+    <Navbar variant="dark" bg="dark" className="flex-md-nowrap p-0">
       <Navbar.Brand as={Link} to="/" className="col-sm-3 col-md-2 mr-0">
         Antomarsi Hiscore
       </Navbar.Brand>
@@ -23,9 +23,9 @@ const Header: React.FC = () => {
           <Nav.Link as={Link} to="/about">
             About
           </Nav.Link>
-          {authData ? (
+          {authData.user ? (
             <NavDropdown
-              title={authData.user!.displayName}
+              title={authData.user.displayName}
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item href="#action/3.1">Games</NavDropdown.Item>

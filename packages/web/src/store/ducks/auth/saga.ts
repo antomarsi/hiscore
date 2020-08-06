@@ -4,44 +4,31 @@ import api from './../../../services/api'
 import history from './../../../routes/history'
 
 import { Creators, Types } from './types'
+import { Creators as NotificationCreators } from '../notification/types'
+import { notificationError } from 'src/utils/handleMessages'
 
-export function* signInWithGoogle({
-  code
+export function* signIn({
+  code,
+  provider
 }: ReturnType<typeof Creators.AUTH_SIGN_IN_REQUEST>) {
   const {
     data: { error, token, user },
     ok
-  } = yield call(api.get, '/auth/google', { code })
-  console.log(token, user);
+  } = yield call(api.get, `/auth/${provider}`, { code })
   if (ok) {
     yield put(Creators.authSignInSuccess({ token, user }))
 
     history.push('/home')
     return
   }
-
+  console.log(notificationError(error, 'Erro ao Autenticar'))
   yield put(Creators.authSignInFailure({ error }))
+  yield put(
+    NotificationCreators.addNotification(
+      notificationError(error, 'Erro ao Autenticar')
+    )
+  )
+  history.push('/login')
 }
 
-export function* signInWithGithub({
-  code
-}: ReturnType<typeof Creators.AUTH_SIGN_IN_REQUEST>) {
-  const {
-    data: { error, token, user },
-    ok
-  } = yield call(api.get, '/auth/github', { code })
-  console.log(token, user);
-  if (ok) {
-    yield put(Creators.authSignInSuccess({ token, user }))
-
-    history.push('/home')
-    return
-  }
-
-  yield put(Creators.authSignInFailure({ error }))
-}
-
-export const saga = [
-  takeLatest(Types.AUTH_SIGN_IN_GOOGLE_REQUEST, signInWithGoogle),
-  takeLatest(Types.AUTH_SIGN_IN_GITHUB_REQUEST, signInWithGithub)
-]
+export const saga = [takeLatest(Types.AUTH_SIGN_IN_REQUEST, signIn)]

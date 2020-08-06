@@ -15,12 +15,8 @@ const Login: React.FC = () => {
     const params = {
       client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
       redirect_uri: process.env.REACT_APP_GITHUB_REDIRECT_URL,
-      scope: ["read:user"].join(" ")
+      scope: ['read:user'].join(' ')
     }
-    console.log(process.env.REACT_APP_GITHUB_REDIRECT_URL)
-    console.log(`https://github.com/login/oauth/authorize?${querystring.stringify(
-      params
-    )}`);
     window.location.href = `https://github.com/login/oauth/authorize?${querystring.stringify(
       params
     )}`

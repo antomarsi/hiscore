@@ -13,7 +13,14 @@ class AuthController extends IControllerBase {
 
     this.router.get(
       '/github',
-      passport.authenticate('github', { session: false }),
+      (req: Request, res: Response, next: NextFunction) => {
+        passport.authenticate('github', { session: false }, err => {
+          if (err) {
+            return res.status(400).json({ error: err.message })
+          }
+          next()
+        })(req, res, next)
+      },
       generateToken,
       sendToken,
       (req, res) => {
@@ -42,9 +49,14 @@ class AuthController extends IControllerBase {
     // GOOGLE auth
     this.router.get(
       '/google',
-      passport.authenticate('google', {
-        session: false
-      }),
+      (req: Request, res: Response, next: NextFunction) => {
+        passport.authenticate('google', { session: false }, err => {
+          if (err) {
+            return res.status(400).json({ error: err.message })
+          }
+          next()
+        })(req, res, next)
+      },
       generateToken,
       sendToken,
       (req, res) => {

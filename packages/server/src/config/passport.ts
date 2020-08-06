@@ -1,11 +1,13 @@
-import { OAuth2Strategy } from 'passport-google-oauth'
+import { OAuth2Strategy, VerifyFunction } from 'passport-google-oauth'
 import { getRepository, getCustomRepository } from 'typeorm'
 import { GOOGLE, GITHUB } from './auth'
 import { Strategy as GithubStrategy } from 'passport-github2'
 import { Strategy as BearerStrategy } from 'passport-http-bearer'
+import { VerifyCallback } from 'passport-oauth2'
 import { Game } from '../database/entity/Game'
 import { UserRepository } from './../database/repository/UserRepository'
 import { checkJwt } from './../middlewares/jwt'
+import { SOCIAL_PROVIDER_TYPE } from './../database/entity/SocialProvider'
 
 export const googleStrategy = new OAuth2Strategy(
   {
@@ -13,26 +15,44 @@ export const googleStrategy = new OAuth2Strategy(
     clientSecret: GOOGLE.clientSecret!,
     callbackURL: GOOGLE.callbackURL
   },
-  (accessToken, refreshToken, profile, done) => {
-    console.log(accessToken)
+  (
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: VerifyFunction
+  ) =>
     getCustomRepository(UserRepository)
-      .upsertGoogleUser(accessToken, refreshToken, profile)
+      .upsertUser(
+        accessToken,
+        refreshToken,
+        profile,
+        SOCIAL_PROVIDER_TYPE.GOOGLE
+      )
       .then(user => done(null, user))
       .catch(err => done(err))
-  }
 )
+
 export const githubStrategy = new GithubStrategy(
   {
     clientID: GITHUB.clientId,
     clientSecret: GITHUB.clientSecret,
-    callbackURL: 'http://localhost:3334/login/github/success',
+    callbackURL: 'http://localhost:3334/login/github/success'
   },
-  (accessToken, refreshToken, profile, done) => {
+  (
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: VerifyCallback
+  ) =>
     getCustomRepository(UserRepository)
-      .upsertGithubUser(accessToken, refreshToken, profile)
+      .upsertUser(
+        accessToken,
+        refreshToken,
+        profile,
+        SOCIAL_PROVIDER_TYPE.GITHUB
+      )
       .then(user => done(null, user))
       .catch(err => done(err))
-  }
 )
 
 export const bearerUserStrategy = new BearerStrategy((token, done) => {

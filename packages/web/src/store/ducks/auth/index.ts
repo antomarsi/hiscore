@@ -10,15 +10,10 @@ export const FILTER_PERSISTOR = createFilter(
 )
 
 export default createReducer(INITIAL_STATE, {
-  [Types.AUTH_SIGN_IN_GOOGLE_REQUEST]: (state = INITIAL_STATE) => ({
+  [Types.AUTH_SIGN_IN_REQUEST]: (state = INITIAL_STATE) => ({
     ...state,
     loading: true
   }),
-  [Types.AUTH_SIGN_IN_GITHUB_REQUEST]: () => ({
-    ...INITIAL_STATE,
-    loading: true
-  }),
-
   [Types.AUTH_SIGN_IN_SUCCESS]: (
     state = INITIAL_STATE,
     { data: { token, user } }
