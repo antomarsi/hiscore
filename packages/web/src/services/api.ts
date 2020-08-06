@@ -1,6 +1,6 @@
 import { create } from 'apisauce'
-
 import store from './../store'
+import { Creators } from '../store/ducks/auth/types'
 
 const api = create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -21,10 +21,19 @@ const api = create({
 
 api.addRequestTransform(request => {
   const {
-    auth: { data }
+    auth: { token }
   } = store.store.getState()
 
-  if (data?.token) request.headers['Authorization'] = `BEARER ${data.token}`
+  if (token) request.headers['Authorization'] = `BEARER ${token}`
+})
+
+api.addResponseTransform(response => {
+  var newToken = response.headers["X-Auth-Token"];
+  if (newToken) {
+    store.store.dispatch(
+      Creators.authTokenUpdate(newToken)
+    )
+  }
 })
 
 export default api

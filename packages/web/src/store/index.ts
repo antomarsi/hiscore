@@ -9,8 +9,9 @@ import { InitialAuthState, AuthState } from './ducks/auth/types'
 import createRootReducer from './ducks/rootReducer'
 import rootSaga from './ducks/rootSaga'
 import createFilter from 'redux-persist-transform-filter'
-import reactotron from './../config/ReactotronConfig';
-import history from './../routes/history';
+import reactotron from './../config/ReactotronConfig'
+import history from './../routes/history'
+import { FILTER_PERSISTOR as AUTH_FILTER_PERSISTOR } from './ducks/auth'
 
 export type ApplicationState = {
   auth: AuthState
@@ -21,13 +22,10 @@ const initialState: ApplicationState = {
   auth: InitialAuthState
 }
 
-const persistedFilter = createFilter('auth', ['access', 'refresh'])
-
 const persistConfig: PersistConfig = {
-  key: 'root',
+  key: 'hiscore-app',
   storage,
-  whitelist: ['auth'],
-  transforms: [persistedFilter]
+  transforms: [AUTH_FILTER_PERSISTOR]
 }
 
 const configureStore = (

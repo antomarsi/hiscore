@@ -4,13 +4,10 @@ export const { Types, Creators } = createActions({
   // Sign In
   authSignInGoogleRequest: ['code'],
   authSignInGithubRequest: ['code'],
-  authSignInRequest: ['code'],
   authSignInSuccess: ['data'],
   authSignInFailure: ['signInError'],
-  // Sign Up
-  authSignUpRequest: ['data'],
-  authSignUpSuccess: ['data'],
-  authSignUpFailure: ['error'],
+
+  authTokenUpdate: ['token'],
   // Auth Reset
   authReset: []
 })
@@ -21,21 +18,17 @@ export const { Types, Creators } = createActions({
 
 export interface User {
   email: string
-  _id: string
-}
-
-export interface Auth {
-  token: string
-  user: User
+  displayName: string
 }
 
 /**
  * State type
  */
 export interface AuthState {
-  readonly data?: Auth
   readonly loading: boolean
   readonly error?: String
+  token?: string
+  user?: User
 }
 
 export const InitialAuthState: AuthState = {

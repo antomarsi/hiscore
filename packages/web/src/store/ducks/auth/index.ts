@@ -10,8 +10,8 @@ export const FILTER_PERSISTOR = createFilter(
 )
 
 export default createReducer(INITIAL_STATE, {
-  [Types.AUTH_SIGN_IN_GOOGLE_REQUEST]: () => ({
-    ...INITIAL_STATE,
+  [Types.AUTH_SIGN_IN_GOOGLE_REQUEST]: (state = INITIAL_STATE) => ({
+    ...state,
     loading: true
   }),
   [Types.AUTH_SIGN_IN_GITHUB_REQUEST]: () => ({
@@ -26,34 +26,20 @@ export default createReducer(INITIAL_STATE, {
     ...state,
     loading: false,
     error: undefined,
-    data: {
-      token,
-      user
-    }
+    token,
+    user
   }),
   [Types.AUTH_SIGN_IN_FAILURE]: (state = INITIAL_STATE, { error }) => ({
     ...state,
     loading: false,
     error,
-    data: undefined
+    token: undefined,
+    user: undefined
   }),
 
-  [Types.AUTH_SIGN_UP_REQUEST]: () => ({
-    ...INITIAL_STATE,
-    loading: true,
-    error: undefined
-  }),
-  [Types.AUTH_SIGN_UP_SUCCESS]: (
-    state = INITIAL_STATE,
-    { data: { token, user } }
-  ) => ({
+  [Types.AUTH_TOKEN_UPDATE]: (state = INITIAL_STATE, { token }) => ({
     ...state,
-    loading: true
-  }),
-  [Types.AUTH_SIGN_UP_FAILURE]: (state = INITIAL_STATE, { error }) => ({
-    ...state,
-    loading: true,
-    error
+    token
   }),
 
   [Types.AUTH_RESET]: (state = INITIAL_STATE) => ({

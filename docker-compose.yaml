@@ -19,8 +19,6 @@ services:
     build:
       context: .
     working_dir: /app/packages/web
-    links:
-      - api
     depends_on:
       - api
     ports:

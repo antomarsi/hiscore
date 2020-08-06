@@ -3,6 +3,7 @@ import IControllerBase from './IController'
 import { User } from '../database/entity/User'
 import passport from 'passport'
 import { generateToken, sendToken } from './../middlewares/jwt'
+import { classToPlain } from 'class-transformer'
 
 class AuthController extends IControllerBase {
   public static path: string = '/auth'
@@ -14,7 +15,12 @@ class AuthController extends IControllerBase {
       '/github',
       passport.authenticate('github', { session: false }),
       generateToken,
-      sendToken
+      sendToken,
+      (req, res) => {
+        return res
+          .status(200)
+          .json({ token: req.token!, user: classToPlain(req.user) })
+      }
     )
 
     /*this.router.get(
@@ -37,30 +43,28 @@ class AuthController extends IControllerBase {
     this.router.get(
       '/google',
       passport.authenticate('google', {
-        scope: ['profile', 'email'],
         session: false
       }),
-      (req: Request, res: Response, next: NextFunction) => {
-        if (!req.user) {
-          return res.status(401).send('User Not Authenticated')
-        }
-        req.authInfo = { id: (req.user as User).id }
-        next()
+      generateToken,
+      sendToken,
+      (req, res) => {
+        return res
+          .status(200)
+          .json({ token: req.token!, user: classToPlain(req.user) })
       }
     )
 
     this.router.get(
-      '/google/callback',
-      passport.authenticate('google', {
-        failureRedirect: '/login',
-        session: false
-      }),
-      (req: Request, res: Response) => {
-        res.redirect('/login/success')
+      '/me',
+      passport.authenticate('user-jwt'),
+      generateToken,
+      sendToken,
+      (req, res) => {
+        return res
+          .status(200)
+          .json({ token: req.token!, user: classToPlain(req.user) })
       }
     )
-
-    this.router.get('/me', passport.authenticate('user-jwt'))
     /*
     this.router.get('/logout', (req, res) => {
       console.log('loginout')

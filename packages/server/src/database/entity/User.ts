@@ -7,10 +7,12 @@ import {
   OneToMany
 } from 'typeorm'
 import { Game } from './Game'
+import { Exclude } from "class-transformer"
 import { SocialProvider } from './SocialProvider'
 
 @Entity()
 export class User{
+  @Exclude()
   @PrimaryGeneratedColumn()
   id: number
 
@@ -20,17 +22,21 @@ export class User{
   @Column()
   email: string
 
-  @Column()
+  @Exclude()
+  @Column({select: false})
   @CreateDateColumn()
   createdAt: Date
 
-  @Column()
+  @Exclude()
+  @Column({select: false})
   @UpdateDateColumn()
   updatedAt: Date
 
+  @Exclude()
   @OneToMany(type => Game, game => game.user)
   games: Game[]
 
+  @Exclude()
   @OneToMany(type => SocialProvider, provider => provider.user)
   providers: SocialProvider[]
 }
