@@ -8,18 +8,20 @@ import { routerMiddleware, RouterState } from 'connected-react-router'
 import { InitialAuthState, AuthState } from './ducks/auth/types'
 import createRootReducer from './ducks/rootReducer'
 import rootSaga from './ducks/rootSaga'
-import createFilter from 'redux-persist-transform-filter'
 import reactotron from './../config/ReactotronConfig'
 import history from './../routes/history'
 import { FILTER_PERSISTOR as AUTH_FILTER_PERSISTOR } from './ducks/auth'
+import { GameState, InitialGameState } from './ducks/game/types';
 
 export type ApplicationState = {
   auth: AuthState
+  game: GameState
   router?: RouterState
 }
 
 const initialState: ApplicationState = {
-  auth: InitialAuthState
+  auth: InitialAuthState,
+  game: InitialGameState
 }
 
 const persistConfig: PersistConfig = {

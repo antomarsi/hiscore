@@ -1,4 +1,4 @@
-import { create } from 'apisauce'
+import { create, ApiResponse } from 'apisauce'
 import store from './../store'
 import { Creators } from '../store/ducks/auth/types'
 
@@ -27,8 +27,8 @@ api.addRequestTransform(request => {
   if (token) request.headers['Authorization'] = `BEARER ${token}`
 })
 
-api.addResponseTransform(response => {
-  var newToken = response.headers["X-Auth-Token"];
+api.addResponseTransform((response) => {
+  var newToken = response.headers ? response.headers["X-Auth-Token"] : null
   if (newToken) {
     store.store.dispatch(
       Creators.authTokenUpdate(newToken)

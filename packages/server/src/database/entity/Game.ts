@@ -11,6 +11,7 @@ import {
 import { Length } from 'class-validator'
 import { User } from './User'
 import { Leaderboard } from './Leaderboard'
+import { Exclude } from 'class-transformer'
 
 @Entity()
 export class Game {
@@ -28,17 +29,20 @@ export class Game {
   @Column({ type: 'bool', default: false })
   useAuthentication: boolean = false
 
+  @Exclude()
   @Column()
   @CreateDateColumn()
   createdAt: Date
 
+  @Exclude()
   @Column()
   @UpdateDateColumn()
   updatedAt: Date
 
+  @Exclude()
   @ManyToOne(type => User, user => user.games)
   user: User
-
+  @Exclude()
   @OneToMany(type => Leaderboard, leaderboard => leaderboard.game)
   leaderboards: Leaderboard[]
 }
