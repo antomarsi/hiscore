@@ -3,3 +3,5 @@ declare namespace Express {
     token?: string
   }
 }
+
+declare module 'simple-oauth2'

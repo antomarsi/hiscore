@@ -1,20 +1,17 @@
 import { EntityRepository, Repository, getRepository } from 'typeorm'
 import { User } from '../entity/User'
-import { Profile as GoogleProfile } from 'passport-google-oauth'
-import { Profile as GithubProfile } from 'passport-github2'
-import { Profile } from 'passport'
 import {
   SocialProvider,
   SOCIAL_PROVIDER_TYPE
 } from './../entity/SocialProvider'
 import e from 'express'
+import { OAuthProfile } from './../../config/oauth'
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   upsertUser(
     accessToken: string,
-    refreshToken: string,
-    profile: Profile,
+    profile: OAuthProfile,
     provider: SOCIAL_PROVIDER_TYPE
   ): Promise<User> {
     return new Promise((resolve, reject) => {
@@ -31,13 +28,16 @@ export class UserRepository extends Repository<User> {
         })
         .catch(async error => {
           var user = await this.findOneOrCreate({
-            email: profile.emails![0].value,
+            email: profile.email,
             displayName: profile.displayName
           })
           var newProvider = new SocialProvider()
           newProvider.providerId = profile.id
           newProvider.accessKey = accessToken
           newProvider.provider = provider
+          if (!user.providers) {
+            user.providers = []
+          }
           user.providers.push(newProvider)
 
           return this.save(user)

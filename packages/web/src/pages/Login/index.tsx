@@ -4,13 +4,6 @@ import { Button, Form } from 'react-bootstrap'
 import querystring from 'querystring'
 
 const Login: React.FC = () => {
-  const onSuccess = (response: any) => {
-    console.log(response)
-    //dispatch(singin(response))
-  }
-  const onFailure = (response: any) => {
-    console.error(response)
-  }
   const loginGithub = () => {
     const params = {
       client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
@@ -21,6 +14,17 @@ const Login: React.FC = () => {
       params
     )}`
   }
+  const googleGithub = () => {
+    const params = {
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+      redirect_uri: process.env.REACT_APP_GOOGLE_REDIRECT_URL,
+      response_type: "code",
+      scope: ['https://www.googleapis.com/auth/userinfo.profile'].join(' ')
+    }
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${querystring.stringify(
+      params
+    )}`
+  }
   return (
     <Container>
       <FormSignIn>
@@ -28,7 +32,7 @@ const Login: React.FC = () => {
         <Button size="lg" variant="primary" block onClick={loginGithub}>
           Sign in with Github
         </Button>
-        <Button size="lg" variant="primary" block>
+        <Button size="lg" variant="primary" block onClick={googleGithub}>
           Sign in with Google
         </Button>
       </FormSignIn>

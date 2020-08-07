@@ -1,26 +1,18 @@
-import { Response, Request, Router, NextFunction } from 'express'
+import { Response, Request, NextFunction } from 'express'
 import IControllerBase from './IController'
-import { User } from '../database/entity/User'
 import passport from 'passport'
 import { generateToken, sendToken } from './../middlewares/jwt'
 import { classToPlain } from 'class-transformer'
+import { githubAuthMiddleware, googleAuthMiddleware } from './../middlewares/oauth';
 
 class AuthController extends IControllerBase {
   public static path: string = '/auth'
 
   public initRoutes() {
     // GITHUB auth
-
     this.router.get(
       '/github',
-      (req: Request, res: Response, next: NextFunction) => {
-        passport.authenticate('github', { session: false }, err => {
-          if (err) {
-            return res.status(400).json({ error: err.message })
-          }
-          next()
-        })(req, res, next)
-      },
+      githubAuthMiddleware,
       generateToken,
       sendToken,
       (req, res) => {
@@ -30,33 +22,10 @@ class AuthController extends IControllerBase {
       }
     )
 
-    /*this.router.get(
-      '/github',
-      passport.authenticate('github', {
-        session: false
-      }),
-      (req: Request, res: Response, next: NextFunction) => {
-        if (!req.user) {
-          return res.status(401).send('User Not Authenticated')
-        }
-        req.authInfo = { id: (req.user as User).id }
-        next()
-      },
-      generateToken,
-      sendToken
-    )*/
-
     // GOOGLE auth
     this.router.get(
       '/google',
-      (req: Request, res: Response, next: NextFunction) => {
-        passport.authenticate('google', { session: false }, err => {
-          if (err) {
-            return res.status(400).json({ error: err.message })
-          }
-          next()
-        })(req, res, next)
-      },
+      googleAuthMiddleware,
       generateToken,
       sendToken,
       (req, res) => {

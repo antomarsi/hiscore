@@ -16,6 +16,10 @@ class GameController extends IControllerBase {
     this.router.put('/:id/leaderboard/:leaderboardId', checkLogin, this.update)
   }
 
+  public async index(req: Request, res: Response) {
+
+  }
+
   public async store(req: Request, res: Response) {
     //Get parameters from the body
     const { name } = req.body

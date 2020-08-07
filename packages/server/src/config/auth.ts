@@ -3,7 +3,7 @@ const url = process.env.API_URL || 'http://localhost:3333'
 export const GITHUB = {
   clientId: process.env.PASSPORT_GITHUB_CLIENT_ID || '',
   clientSecret: process.env.PASSPORT_GITHUB_CLIENT_SECRET || '',
-  callbackURL: process.env.PASSPORT_GITHUB_CALLBACK
+  callbackURL: process.env.PASSPORT_GITHUB_CALLBACK || ''
 }
 
 export const GOOGLE = {
