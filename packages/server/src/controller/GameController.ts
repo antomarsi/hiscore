@@ -1,23 +1,33 @@
-import { checkLogin } from '../middlewares/checkLogin'
-import { Request, Response, Router } from 'express'
-import IControllerBase from './IController'
+import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
-import { User } from '../database/entity/User'
-import { Game } from '../database/entity/Game'
+
+import IControllerBase from './IController'
+import { checkToken, generateToken, sendToken } from '../middlewares/jwt'
+import { User, Game } from '../database/entity'
 import { Leaderboard } from '../database/entity/Leaderboard'
 
 class GameController extends IControllerBase {
   public static path = '/game'
 
   public initRoutes() {
-    this.router.post('/', checkLogin, this.store)
-    this.router.put('/:id', checkLogin, this.update)
-    this.router.delete('/:id', checkLogin, this.destroy)
-    this.router.put('/:id/leaderboard/:leaderboardId', checkLogin, this.update)
+    this.router.get('/', checkToken, generateToken, sendToken, this.index)
+    this.router.post('/', checkToken, generateToken, sendToken, this.store)
+    this.router.put('/:id', checkToken, generateToken, sendToken, this.update)
+    this.router.delete(
+      '/:id',
+      checkToken,
+      generateToken,
+      sendToken,
+      this.destroy
+    )
   }
 
   public async index(req: Request, res: Response) {
-
+    const gameRepository = getRepository(Game)
+    var games = gameRepository.find({
+      where: { userId: (req.user as User).id }
+    })
+    return res.status(200).json()
   }
 
   public async store(req: Request, res: Response) {
@@ -66,44 +76,6 @@ class GameController extends IControllerBase {
     })
     gameRepository.delete(game)
     res.status(200).json()
-  }
-
-  public async updateLeaderboard(req: Request, res: Response) {
-    const { id, leaderboardId } = req.query
-    const leaderboardRepository = getRepository(Leaderboard)
-    let leaderboard = await leaderboardRepository.findOneOrFail({
-      join: {
-        alias: 'leaderboard',
-        innerJoin: {
-          game: 'leaderboard.game',
-          user: 'game.user'
-        }
-      },
-      where: { game: { id }, id: leaderboardId }
-    })
-    const { name, saveMethod, resetMethod } = req.body
-    leaderboard.name = name
-    leaderboard.saveMethod = saveMethod
-    leaderboard.resetMethod = resetMethod
-    leaderboardRepository.save(leaderboard)
-    return res.status(200).json(leaderboard)
-  }
-
-  public async deleteLeaderboard(req: Request, res: Response) {
-    const { id, leaderboardId } = req.query
-    const leaderboardRepository = getRepository(Leaderboard)
-    let leaderboard = await leaderboardRepository.findOneOrFail({
-      join: {
-        alias: 'leaderboard',
-        innerJoin: {
-          game: 'leaderboard.game',
-          user: 'game.user'
-        }
-      },
-      where: { game: { id }, id: leaderboardId }
-    })
-    leaderboardRepository.delete(leaderboard)
-    return res.status(200)
   }
 }
 

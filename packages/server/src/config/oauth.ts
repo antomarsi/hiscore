@@ -1,6 +1,6 @@
-import { GOOGLE, GITHUB } from './auth'
 import { AuthorizationCode } from 'simple-oauth2'
 
+import { GOOGLE, GITHUB } from './auth'
 export interface OAuthProfile {
   id: string
   displayName: string
@@ -10,7 +10,7 @@ export interface OAuthProfile {
 export const clientGoogleOAuth = new AuthorizationCode({
   client: {
     id: GOOGLE.clientId,
-    secret: GOOGLE.clientSecret
+    secret: GOOGLE.clientSecret,
   },
   auth: {
     tokenHost: 'https://oauth2.googleapis.com',

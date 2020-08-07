@@ -13,7 +13,7 @@ import { ApplicationState } from './../store'
 import NotFoundPage from './../pages/NotFound/index'
 import LoginPage from './../pages/Login'
 import Header from './../components/Header'
-import { Container, Row, Toast } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import About from './../pages/About'
 import GodotPlugin from '../pages/Home/GodotPlugin'
 import Github from '../pages/Home/Github'
@@ -22,6 +22,8 @@ import Dashboard from 'src/pages/Dashboard'
 import LoginSuccess from './../pages/Login/LoginSuccess'
 import Sidebar from './../components/Sidebar'
 import Notifications from '../components/Notifications'
+import Games from 'src/pages/Games'
+import { SidebarWrapper, ContentPageWrapper } from './styles'
 
 const UnloggedRoute: React.SFC<RouteProps> = ({ component, ...rest }: any) => {
   const NotAuthenticated = useSelector(
@@ -53,8 +55,12 @@ const PrivateRoute: React.SFC<RouteProps> = ({ component, ...rest }: any) => {
       render={(props: RouteComponentProps) =>
         isAuthenticated ? (
           <Row>
-            <Sidebar />
-            {React.createElement(component, props)}
+            <SidebarWrapper>
+              <Sidebar />
+            </SidebarWrapper>
+            <ContentPageWrapper>
+              {React.createElement(component, props)}
+            </ContentPageWrapper>
           </Row>
         ) : (
           <Redirect
@@ -77,6 +83,7 @@ const Routes: React.SFC<{}> = props => {
         <Notifications />
         <Switch location={location}>
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          <PrivateRoute exact path="/games" component={Games} />
           <UnloggedRoute
             exact
             path="/login/:provider/success"

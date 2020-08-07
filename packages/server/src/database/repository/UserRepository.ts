@@ -1,11 +1,8 @@
 import { EntityRepository, Repository, getRepository } from 'typeorm'
-import { User } from '../entity/User'
-import {
-  SocialProvider,
-  SOCIAL_PROVIDER_TYPE
-} from './../entity/SocialProvider'
-import e from 'express'
-import { OAuthProfile } from './../../config/oauth'
+
+import { User, SocialProvider } from '../entity'
+import { SOCIAL_PROVIDER_TYPE } from '../entity/SocialProvider'
+import { OAuthProfile } from '../../config/oauth'
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

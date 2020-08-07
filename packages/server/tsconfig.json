@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
@@ -16,9 +15,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true,
-    "typeRoots": ["./src/types"]
+    "noImplicitAny": true
   },
-  "include": ["./src/**/*", "types"],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

@@ -11,21 +11,21 @@ export function* signIn({
   code,
   provider
 }: ReturnType<typeof Creators.AUTH_SIGN_IN_REQUEST>) {
-  const {
-    data: { error, token, user },
-    ok
-  } = yield call(api.get, `/auth/${provider}`, { code })
-  if (ok) {
-    yield put(Creators.authSignInSuccess({ token, user }))
+  const response = yield call(api.get, `/auth/${provider}`, {
+    code
+  })
+  if (response.ok) {
+    yield put(
+      Creators.authSignInSuccess(response.data.token, response.data.user)
+    )
 
-    history.push('/home')
+    history.push('/dashboard')
     return
   }
-  console.log(notificationError(error, 'Erro ao Autenticar'))
-  yield put(Creators.authSignInFailure({ error }))
+  yield put(Creators.authSignInFailure())
   yield put(
     NotificationCreators.addNotification(
-      notificationError(error, 'Erro ao Autenticar')
+      notificationError(response, 'Falha ao buscar')
     )
   )
   history.push('/login')

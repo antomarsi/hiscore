@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { Container as BootContainer } from 'react-bootstrap'
 
 export const Container = styled.div`
   display: -ms-flexbox;

@@ -1,25 +1,15 @@
 import { Request, Response } from 'express'
-import IControllerBase from './IController'
 import { getRepository } from 'typeorm'
-import { Score } from '../database/entity/Score'
-import { Game } from '../database/entity/Game'
-import passport from 'passport'
-import { Leaderboard } from '../database/entity/Leaderboard'
+
+import IControllerBase from './IController'
+import { Score, Game, Leaderboard } from '../database/entity'
 
 class ScoreController extends IControllerBase {
   public static path = '/score'
 
   public initRoutes() {
-    this.router.post(
-      '/',
-      passport.authenticate('gameApiKey', { session: false }),
-      this.index
-    )
-    this.router.put(
-      '/',
-      passport.authenticate('gameApiKey', { session: false }),
-      this.store
-    )
+    this.router.post('/', this.index)
+    this.router.put('/', this.store)
   }
 
   public async index(req: Request, res: Response) {

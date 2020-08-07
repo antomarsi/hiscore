@@ -17,3 +17,4 @@ export interface NotificationState {
 export const InitialState: NotificationState = {
   notifications: []
 }
+export const NotificationCreators = Creators

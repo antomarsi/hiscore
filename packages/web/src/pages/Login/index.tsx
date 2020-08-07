@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, FormSignIn } from './styles'
-import { Button, Form } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import querystring from 'querystring'
 
 const Login: React.FC = () => {

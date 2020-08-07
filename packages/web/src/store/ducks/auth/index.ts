@@ -1,33 +1,25 @@
 import { createReducer } from 'reduxsauce'
-import { createFilter } from 'redux-persist-transform-filter'
 import { InitialAuthState as INITIAL_STATE, Types } from './types'
+import { createFilter } from 'redux-persist-transform-filter'
 
-export const FILTER_PERSISTOR = createFilter(
-  'auth',
-  undefined,
-  ['token', 'user'],
-  'whitelist'
-)
+export const authPersistTransform = createFilter('auth', ['token', 'user'])
 
 export default createReducer(INITIAL_STATE, {
   [Types.AUTH_SIGN_IN_REQUEST]: (state = INITIAL_STATE) => ({
     ...state,
     loading: true
   }),
-  [Types.AUTH_SIGN_IN_SUCCESS]: (
-    state = INITIAL_STATE,
-    { data: { token, user } }
-  ) => ({
+  [Types.AUTH_SIGN_IN_SUCCESS]: (state = INITIAL_STATE, { token, user }) => ({
     ...state,
     loading: false,
-    error: undefined,
+    error: false,
     token,
     user
   }),
-  [Types.AUTH_SIGN_IN_FAILURE]: (state = INITIAL_STATE, { error }) => ({
+  [Types.AUTH_SIGN_IN_FAILURE]: (state = INITIAL_STATE) => ({
     ...state,
     loading: false,
-    error,
+    error: true,
     token: undefined,
     user: undefined
   }),

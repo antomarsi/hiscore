@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { createServer } from 'http'
+
 import app from './app'
 import api from './config/api'
 import database from './config/database'

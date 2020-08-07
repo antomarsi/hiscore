@@ -1,9 +1,9 @@
-import { Response, Request, NextFunction } from 'express'
-import IControllerBase from './IController'
-import passport from 'passport'
-import { generateToken, sendToken } from './../middlewares/jwt'
+import { Response, Request } from 'express'
 import { classToPlain } from 'class-transformer'
-import { githubAuthMiddleware, googleAuthMiddleware } from './../middlewares/oauth';
+
+import IControllerBase from './IController'
+import { generateToken, sendToken, checkToken } from '../middlewares/jwt'
+import { githubAuthMiddleware, googleAuthMiddleware } from '../middlewares/oauth'
 
 class AuthController extends IControllerBase {
   public static path: string = '/auth'
@@ -15,7 +15,7 @@ class AuthController extends IControllerBase {
       githubAuthMiddleware,
       generateToken,
       sendToken,
-      (req, res) => {
+      (req: Request, res: Response) => {
         return res
           .status(200)
           .json({ token: req.token!, user: classToPlain(req.user) })
@@ -28,7 +28,7 @@ class AuthController extends IControllerBase {
       googleAuthMiddleware,
       generateToken,
       sendToken,
-      (req, res) => {
+      (req: Request, res: Response) => {
         return res
           .status(200)
           .json({ token: req.token!, user: classToPlain(req.user) })
@@ -37,22 +37,15 @@ class AuthController extends IControllerBase {
 
     this.router.get(
       '/me',
-      passport.authenticate('user-jwt'),
+      checkToken,
       generateToken,
       sendToken,
-      (req, res) => {
+      (req: Request, res: Response) => {
         return res
           .status(200)
           .json({ token: req.token!, user: classToPlain(req.user) })
       }
     )
-    /*
-    this.router.get('/logout', (req, res) => {
-      console.log('loginout')
-      req.logout()
-      res.redirect('/')
-    })
-    */
   }
 }
 

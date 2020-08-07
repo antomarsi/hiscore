@@ -1,6 +1,7 @@
-import { create, ApiResponse } from 'apisauce'
+import { create } from 'apisauce'
 import store from './../store'
 import { Creators } from '../store/ducks/auth/types'
+import history from 'src/routes/history'
 
 const api = create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -11,8 +12,8 @@ const api = create({
   },
   validateStatus: function (status: number) {
     if (status === 401) {
-      window.localStorage.clear()
-      window.location.replace('/app')
+      store.store.dispatch(Creators.authReset())
+      history.replace('/app')
       return false
     }
     return true

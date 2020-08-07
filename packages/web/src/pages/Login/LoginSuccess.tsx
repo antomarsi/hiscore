@@ -22,7 +22,7 @@ const LoginSuccess: React.SFC<Props> = props => {
     } else {
       dispatch(Creators.authSignInRequest(queryParams.code, provider))
     }
-  }, [])
+  }, [dispatch, props.history, props.location.search, props.match.params.provider])
 
   return (
     <Container>

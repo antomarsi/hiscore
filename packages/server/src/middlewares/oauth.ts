@@ -1,10 +1,12 @@
-import { clientGithubOAuth, clientGoogleOAuth } from './../config/oauth'
-import HttpException from './../exceptions/HttpException'
 import { Request, Response, NextFunction } from 'express'
-import { getCustomRepository } from 'typeorm'
-import { UserRepository } from './../database/repository/UserRepository'
 import axios from 'axios'
-import { SOCIAL_PROVIDER_TYPE } from './../database/entity/SocialProvider'
+import { getCustomRepository } from 'typeorm'
+
+import { clientGithubOAuth, clientGoogleOAuth } from '../config/oauth'
+import HttpException from '../exceptions/httpException'
+import { UserRepository } from '../database/repository/UserRepository'
+import { SOCIAL_PROVIDER_TYPE } from '../database/entity/SocialProvider'
+import { GOOGLE, GITHUB } from '../config/auth'
 
 export const githubAuthMiddleware = async (
   req: Request,
@@ -12,11 +14,15 @@ export const githubAuthMiddleware = async (
   next: NextFunction
 ) => {
   try {
+    if (req.query.code === undefined) {
+      throw Error('invalid Token')
+    }
     const {
       token: { error, access_token }
     } = await clientGithubOAuth.getToken({
-      code: req.query.code,
-      scope: 'read:user'
+      code: req.query.code.toString(),
+      scope: 'read:user',
+      redirect_uri: GITHUB.callbackURL
     })
     if (error) {
       throw new Error(error)
@@ -36,6 +42,7 @@ export const githubAuthMiddleware = async (
     req.user = user
     next(null)
   } catch (err) {
+    console.error(err)
     next(new HttpException(400, 'Error on Authentication'))
   }
 }
@@ -46,17 +53,18 @@ export const googleAuthMiddleware = async (
   next: NextFunction
 ) => {
   try {
-    const value = await clientGoogleOAuth.getToken({
-      code: req.query.code
-    })
-    if (value.error) {
-      throw new Error(value.error)
+    if (req.query.code === undefined) {
+      throw Error('invalid Token')
     }
+    const value = await clientGoogleOAuth.getToken({
+      code: req.query.code.toString(),
+      redirect_uri: GOOGLE.callbackURL
+    })
     const { data } = await axios.get('https://api.github.com/user', {
-      headers: { Authorization: `token ${value.access_token}` }
+      headers: { Authorization: `token ${value.token.access_token}` }
     })
     const user = getCustomRepository(UserRepository).upsertUser(
-      value.access_token,
+      value.token.access_token,
       {
         id: data.id,
         displayName: data.name,

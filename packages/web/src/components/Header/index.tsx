@@ -1,11 +1,13 @@
 import React from 'react'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { ApplicationState } from 'src/store'
+import { AuthCreators } from 'src/store/ducks/auth/types'
 
 const Header: React.FC = () => {
   const authData = useSelector((state: ApplicationState) => state.auth)
+  const dispatch = useDispatch()
   return (
     <Navbar variant="dark" bg="dark" className="flex-md-nowrap p-0">
       <Navbar.Brand as={Link} to="/" className="col-sm-3 col-md-2 mr-0">
@@ -30,7 +32,11 @@ const Header: React.FC = () => {
             >
               <NavDropdown.Item href="#action/3.1">Games</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => dispatch(AuthCreators.authReset())}
+              >
+                Logout
+              </NavDropdown.Item>
             </NavDropdown>
           ) : (
             <Nav.Link as={Link} to="/login">

@@ -1,7 +1,12 @@
 import { createStore, compose, applyMiddleware, Store } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
-import { persistStore, persistReducer, PersistConfig } from 'redux-persist'
+import {
+  persistStore,
+  persistReducer,
+  PersistConfig,
+  PersistPartial
+} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { History } from 'history'
 import { routerMiddleware, RouterState } from 'connected-react-router'
@@ -10,13 +15,12 @@ import createRootReducer from './ducks/rootReducer'
 import rootSaga from './ducks/rootSaga'
 import reactotron from './../config/ReactotronConfig'
 import history from './../routes/history'
-import { FILTER_PERSISTOR as AUTH_FILTER } from './ducks/auth'
 import { GameState, InitialGameState } from './ducks/game/types'
-import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import {
   InitialState as InitialNotificationState,
   NotificationState
 } from './ducks/notification/types'
+import { authPersistTransform } from './ducks/auth'
 
 export type ApplicationState = {
   auth: AuthState
@@ -31,19 +35,15 @@ const initialState: ApplicationState = {
   notification: InitialNotificationState
 }
 
-export const WHITE_LIST = ['auth']
-
-export const BLACK_LIST = []
-
-export const FILTERS_PERSISTOR = [AUTH_FILTER]
+const PERSIST_WHITELIST = ['auth']
+const PERSIST_BLACKLIST: string[] = []
 
 const persistConfig: PersistConfig = {
   key: 'hiscore-app',
   storage,
-  stateReconciler: autoMergeLevel2,
-  blacklist: BLACK_LIST,
-  whitelist: WHITE_LIST,
-  transforms: FILTERS_PERSISTOR
+  whitelist: PERSIST_WHITELIST,
+  blacklist: PERSIST_BLACKLIST,
+  transforms: [authPersistTransform]
 }
 
 const configureStore = (

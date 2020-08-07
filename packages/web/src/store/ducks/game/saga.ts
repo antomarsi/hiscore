@@ -1,28 +1,27 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 
 import api from '../../../services/api'
-import history from '../../../routes/history'
 
 import { Creators, Types } from './types'
+import { NotificationCreators } from '../notification/types'
+import { notificationError } from 'src/utils/handleMessages'
 
 export function* fetch({
-  code
-}: ReturnType<typeof Creators.AUTH_SIGN_IN_REQUEST>) {
-  const {
-    data: { error, token, user },
-    ok
-  } = yield call(api.get, '/auth/google', { code })
-  console.log(token, user)
-  if (ok) {
-    yield put(Creators.authSignInSuccess({ token, user }))
-
-    history.push('/home')
+  code,
+  provider
+}: ReturnType<typeof Creators.GAME_INDEX_REQUEST>) {
+  const response = yield call(api.get, `/game`)
+  if (response.ok) {
+    yield put(Creators.gameIndexSuccess(response.data))
     return
   }
-
-  yield put(Creators.authSignInFailure({ error }))
+  yield put(Creators.gameIndexFailure())
+  yield put(
+    NotificationCreators.addNotification(
+      notificationError(response, 'Erro ao Autenticar')
+    )
+  )
 }
-
 export function* store({
   data
 }: ReturnType<typeof Creators.GAME_STORE_REQUEST>) {

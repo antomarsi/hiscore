@@ -3,13 +3,15 @@ import { createActions } from 'reduxsauce'
 export const { Types, Creators } = createActions({
   // Sign In
   authSignInRequest: ['code', 'provider'],
-  authSignInSuccess: ['data'],
-  authSignInFailure: ['signInError'],
+  authSignInSuccess: ['token', 'user'],
+  authSignInFailure: [],
 
   authTokenUpdate: ['token'],
   // Auth Reset
   authReset: []
 })
+
+export const AuthCreators = Creators
 
 /**
  * Data types
@@ -25,12 +27,12 @@ export interface User {
  */
 export interface AuthState {
   readonly loading: boolean
-  readonly error?: String
+  readonly error: boolean
   token?: string
   user?: User
 }
 
 export const InitialAuthState: AuthState = {
   loading: false,
-  error: undefined
+  error: false
 }

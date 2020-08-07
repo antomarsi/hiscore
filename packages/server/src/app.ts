@@ -1,8 +1,9 @@
 import express from 'express'
-import routes from './routes'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
+
+import routes from './routes'
 import errorMiddleware from './middlewares/errorMiddleware'
 
 const app = express()

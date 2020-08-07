@@ -6,6 +6,7 @@ export const Container = styled.div.attrs(props => ({
   'aria-atomic': 'true'
 }))`
   position: relative;
+  z-index: 999;
 `
 export const Wrapper = styled.div`
   position: absolute;
