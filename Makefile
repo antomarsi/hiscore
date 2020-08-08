@@ -11,7 +11,7 @@ down:
 server-install:
 	$(DOCKER_EXEC_API) yarn
 
-web-install:
+client-install:
 	$(DOCKER_EXEC_WEB) yarn
 
 install: server-install web-install
@@ -19,11 +19,11 @@ install: server-install web-install
 server-bash:
 	$(DOCKER_EXEC_API) ash
 
-web-bash:
+client-bash:
 	$(DOCKER_EXEC_WEB) ash
 
 server-start:
 	$(DOCKER_EXEC_API) yarn start
 
-web-start:
+client-start:
 	$(DOCKER_EXEC_WEB) yarn start

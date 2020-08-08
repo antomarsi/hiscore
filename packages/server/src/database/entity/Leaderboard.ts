@@ -5,10 +5,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  OneToMany,
-  Generated
+  OneToMany
 } from 'typeorm'
-import { Length } from 'class-validator'
+import { Length, Allow } from 'class-validator'
 import { Score } from './Score'
 import { Game } from './Game'
 
@@ -27,10 +26,12 @@ export class Leaderboard {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Allow()
+  @Column({ nullable: false })
   @Length(4, 20)
   name: string
 
+  @Allow()
   @Column({
     type: 'enum',
     enum: SAVE_METHODS,
@@ -38,6 +39,7 @@ export class Leaderboard {
   })
   saveMethod: SAVE_METHODS
 
+  @Allow()
   @Column({
     type: 'enum',
     enum: RESET_METHOD,
@@ -53,7 +55,10 @@ export class Leaderboard {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @ManyToOne(type => Game, user => user.leaderboards, { onDelete: 'CASCADE' })
+  @ManyToOne(type => Game, user => user.leaderboards, {
+    onDelete: 'CASCADE',
+    nullable: false
+  })
   game: Game
 
   @OneToMany(type => Score, score => score.leaderboard)

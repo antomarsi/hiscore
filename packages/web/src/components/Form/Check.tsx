@@ -17,11 +17,12 @@ const Check: React.FC<Props> = props => {
     <Field {...props}>
       {({
         field: { name, value, onChange },
-        form: { isValid },
+        form: { isValid, isSubmitting },
         meta
       }: FieldProps) => (
         <Form.Group controlId={props.id} {...props.formGroupProps}>
           <Form.Check
+            disabled={isSubmitting}
             {...props.inputProps}
             id={props.id || props.name}
             label={props.label}
@@ -38,7 +39,7 @@ const Check: React.FC<Props> = props => {
     </Field>
   )
 }
-Check.defaultProps ={
+Check.defaultProps = {
   disableValid: false
 }
 

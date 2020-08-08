@@ -5,6 +5,7 @@ import { Spinner } from 'react-bootstrap'
 import { Container, FormSignIn } from './styles'
 import { useDispatch } from 'react-redux'
 import { Creators } from '../../store/ducks/auth/types'
+import { replace } from 'connected-react-router'
 
 interface OwnProps {}
 
@@ -18,11 +19,16 @@ const LoginSuccess: React.SFC<Props> = props => {
     )
     const provider = props.match.params.provider
     if (!queryParams.code) {
-      props.history.replace('/login')
+      dispatch(replace('/login'))
     } else {
       dispatch(Creators.authSignInRequest(queryParams.code, provider))
     }
-  }, [dispatch, props.history, props.location.search, props.match.params.provider])
+  }, [
+    dispatch,
+    props.history,
+    props.location.search,
+    props.match.params.provider
+  ])
 
   return (
     <Container>

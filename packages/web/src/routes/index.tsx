@@ -13,7 +13,7 @@ import { ApplicationState } from './../store'
 import NotFoundPage from './../pages/NotFound/index'
 import LoginPage from './../pages/Login'
 import Header from './../components/Header'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 import About from './../pages/About'
 import GodotPlugin from '../pages/Home/GodotPlugin'
 import Github from '../pages/Home/Github'
@@ -24,7 +24,7 @@ import Sidebar from './../components/Sidebar'
 import Notifications from '../components/Notifications'
 import Games from 'src/pages/Games'
 import { SidebarWrapper, ContentPageWrapper } from './styles'
-import GameForm from './../pages/Games/GameForm';
+import GameForm from './../pages/Games/GameForm'
 
 const UnloggedRoute: React.SFC<RouteProps> = ({ component, ...rest }: any) => {
   const NotAuthenticated = useSelector(
@@ -86,6 +86,7 @@ const Routes: React.SFC<{}> = props => {
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute exact path="/games" component={Games} />
           <PrivateRoute exact path="/games/new" component={GameForm} />
+          <PrivateRoute exact path="/games/edit/:gameId" component={GameForm} />
           <UnloggedRoute
             exact
             path="/login/:provider/success"

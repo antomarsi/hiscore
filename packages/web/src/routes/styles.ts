@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Col } from 'react-bootstrap'
 
 export const SidebarWrapper = styled(Col).attrs(props => ({
-  xs: 3
+  xs: 2
 }))`
   min-height: 100vh !important;
   width: 100vw;
@@ -17,7 +17,7 @@ export const SidebarWrapper = styled(Col).attrs(props => ({
   }
 `
 export const ContentPageWrapper = styled(Col).attrs(props => ({
-  xs: 9,
+  xs: 10,
   className: "pt-3"
 }))`
   min-width: 0;

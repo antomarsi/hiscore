@@ -6,30 +6,42 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   OneToMany,
-  Generated
+  Generated,
+  BeforeInsert,
+  AfterInsert,
+  BeforeUpdate,
+  Unique
 } from 'typeorm'
-import { Length } from 'class-validator'
+import { Length, Allow, IsNotEmpty } from 'class-validator'
 import { User } from './User'
 import { Leaderboard } from './Leaderboard'
 import { Exclude } from 'class-transformer'
+import { sign } from 'jsonwebtoken'
+import auth from '../../config/auth'
 
 @Entity()
+@Unique(['user', 'name'])
 export class Game {
+  @Allow()
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Allow()
+  @Column({ nullable: false })
   @Length(4, 20)
   name: string
 
+  @Allow()
   @Column()
   @Length(0, 256)
   description: string
 
-  @Column()
+  @Exclude()
+  @Column({ nullable: false })
   @Generated('uuid')
   apiKey: string
 
+  @Allow()
   @Column({ type: 'bool', default: false })
   useAuthentication: boolean = false
 
@@ -44,10 +56,16 @@ export class Game {
   updatedAt: Date
 
   @Exclude()
-  @ManyToOne(type => User, user => user.games)
+  @IsNotEmpty()
+  @ManyToOne(type => User, user => user.games, { nullable: false })
   user: User
 
   @Exclude()
   @OneToMany(type => Leaderboard, leaderboard => leaderboard.game)
   leaderboards: Leaderboard[]
+
+  @AfterInsert()
+  setApiKey() {
+    this.apiKey = sign({ id: this.id }, auth.secret)
+  }
 }

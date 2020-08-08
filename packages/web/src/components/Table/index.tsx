@@ -1,18 +1,23 @@
 import React, { ReactNode } from 'react'
 import { Table as RTable, TableProps, Spinner } from 'react-bootstrap'
-
 // import { Container } from './styles';/
 
 interface OwnProps {
   header: string[]
   values: ReactNode[][]
   loading?: boolean
-  emptyMessage?: ReactNode | string
+  noDataMessage: ReactNode | string
 }
 
 type Props = OwnProps & TableProps
 
-const Table: React.FC<Props> = ({ header, values, loading, ...props }) => {
+const Table: React.FC<Props> = ({
+  header,
+  values,
+  loading,
+  noDataMessage,
+  ...props
+}) => {
   return (
     <RTable {...props}>
       <thead>
@@ -43,7 +48,7 @@ const Table: React.FC<Props> = ({ header, values, loading, ...props }) => {
         {values.length === 0 && !loading && (
           <tr>
             <td colSpan={header.length} className="text-center">
-              {props.emptyMessage}
+              {noDataMessage}
             </td>
           </tr>
         )}
@@ -57,7 +62,7 @@ Table.defaultProps = {
   bordered: true,
   hover: true,
   responsive: true,
-  emptyMessage: 'No data Found'
+  noDataMessage: 'No data Found'
 }
 
 export default Table

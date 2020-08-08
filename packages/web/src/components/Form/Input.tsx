@@ -17,12 +17,13 @@ const Input: React.FC<Props> = props => {
     <Field {...props}>
       {({
         field: { name, value, onChange },
-        form: { isValid },
+        form: { isValid, isSubmitting },
         meta
       }: FieldProps) => (
         <Form.Group controlId={props.id} {...props.formGroupProps}>
           {props.label && <Form.Label>{props.label}</Form.Label>}
           <Form.Control
+            disabled={isSubmitting}
             {...props.inputProps}
             name={name}
             value={value}

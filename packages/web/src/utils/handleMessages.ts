@@ -1,11 +1,7 @@
 import { NotificationItemStyleProps } from 'src/components/Notifications'
-import {
-  ApiErrorResponse,
-  NETWORK_ERROR,
-  SERVER_ERROR,
-  TIMEOUT_ERROR
-} from 'apisauce'
 import { MdSignalWifiOff, MdReport, MdTimerOff } from 'react-icons/md'
+import store from 'src/store'
+import { NotificationCreators } from 'src/store/ducks/notification/types'
 
 export const NetworkError: NotificationItemStyleProps = {
   title: 'Erro na comunicação com o servidor',
@@ -45,21 +41,26 @@ export const handleError = (error: any) => {
   return null
 }
 export const notificationError = (
-  error: ApiErrorResponse<any>,
-  title: string
+  error: any,
+  title = 'Um erro ocorreu'
 ): NotificationItemStyleProps | undefined => {
-  switch (error.problem) {
-    case NETWORK_ERROR:
-      return NetworkError
-    case SERVER_ERROR:
-      return ServerError
-    case TIMEOUT_ERROR:
+  if (!error.response) {
+    if (error.message === 'ECONNABORTED') {
       return TimeoutError
-    default:
-      break
+    }
+    return NetworkError
+  }
+  if (error.response.status === 500) {
+    return ServerError
   }
   if (error.status === 401) {
     return undefined
   }
   return { title, body: handleError(error.data), variant: 'danger' }
+}
+
+export const dispatchNotification = (error: any, title = 'Um erro ocorreu') => {
+  const notification = notificationError(error, title)
+  if (notification)
+    store.store.dispatch(NotificationCreators.addNotification(notification))
 }

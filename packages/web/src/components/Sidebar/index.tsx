@@ -1,7 +1,6 @@
 import React from 'react'
 import { Nav } from 'react-bootstrap'
 
-import { Container, SidebarSticky } from './styles'
 import { Link } from 'react-router-dom'
 import { IconType } from 'react-icons/lib'
 import {

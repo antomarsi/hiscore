@@ -3,9 +3,11 @@ import { EntityRepository, Repository, getRepository } from 'typeorm'
 import { User, SocialProvider } from '../entity'
 import { SOCIAL_PROVIDER_TYPE } from '../entity/SocialProvider'
 import { OAuthProfile } from '../../config/oauth'
+import { Provider } from 'react-redux'
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+
   upsertUser(
     accessToken: string,
     profile: OAuthProfile,
@@ -28,11 +30,12 @@ export class UserRepository extends Repository<User> {
             email: profile.email,
             displayName: profile.displayName
           })
-          var newProvider = new SocialProvider()
-          newProvider.providerId = profile.id
-          newProvider.accessKey = accessToken
-          newProvider.provider = provider
-          if (!user.providers) {
+          var newProvider = getRepository(SocialProvider).create({
+            providerId: profile.id,
+            accessKey: accessToken,
+            provider: provider
+          })
+          if (user.providers === undefined) {
             user.providers = []
           }
           user.providers.push(newProvider)
@@ -52,9 +55,7 @@ export class UserRepository extends Repository<User> {
       where: { email: userData.email }
     })
     if (!user) {
-      user = new User()
-      user.displayName = userData.displayName
-      user.email = userData.email
+      user = this.create(userData)
     }
     return user
   }

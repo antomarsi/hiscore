@@ -7,6 +7,7 @@ import HttpException from '../exceptions/httpException'
 import { UserRepository } from '../database/repository/UserRepository'
 import { SOCIAL_PROVIDER_TYPE } from '../database/entity/SocialProvider'
 import { GOOGLE, GITHUB } from '../config/auth'
+import { InvalidTokenException } from './../exceptions/tokenExceptions'
 
 export const githubAuthMiddleware = async (
   req: Request,
@@ -15,7 +16,7 @@ export const githubAuthMiddleware = async (
 ) => {
   try {
     if (req.query.code === undefined) {
-      throw Error('invalid Token')
+      throw new InvalidTokenException()
     }
     const {
       token: { error, access_token }
@@ -25,7 +26,7 @@ export const githubAuthMiddleware = async (
       redirect_uri: GITHUB.callbackURL
     })
     if (error) {
-      throw new Error(error)
+      throw new HttpException(400, error)
     }
     const { data } = await axios.get('https://api.github.com/user', {
       headers: { Authorization: `token ${access_token}` }
@@ -42,8 +43,7 @@ export const githubAuthMiddleware = async (
     req.user = user
     next(null)
   } catch (err) {
-    console.error(err)
-    next(new HttpException(400, 'Error on Authentication'))
+    next(err)
   }
 }
 
@@ -54,7 +54,7 @@ export const googleAuthMiddleware = async (
 ) => {
   try {
     if (req.query.code === undefined) {
-      throw Error('invalid Token')
+      throw new InvalidTokenException()
     }
     const value = await clientGoogleOAuth.getToken({
       code: req.query.code.toString(),
@@ -75,6 +75,6 @@ export const googleAuthMiddleware = async (
     req.user = user
     next(null)
   } catch (err) {
-    next(new HttpException(400, 'Error on Authentication'))
+    next(err)
   }
 }

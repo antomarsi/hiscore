@@ -1,64 +1,55 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 
-import api from '../../../services/api'
-
+import api from 'src/services/api'
 import { Creators, Types } from './types'
-import { NotificationCreators } from '../notification/types'
-import { notificationError } from 'src/utils/handleMessages'
+import { push } from 'connected-react-router'
 
-export function* fetch({
-  code,
-  provider
-}: ReturnType<typeof Creators.GAME_INDEX_REQUEST>) {
-  const response = yield call(api.get, `/game`)
-  if (response.ok) {
-    yield put(Creators.gameIndexSuccess(response.data))
-    return
+export function* index() {
+  try {
+    const response = yield call(api.get, `/game`)
+    return yield put(Creators.gameIndexSuccess(response.data))
+  } catch (err) {
+    yield put(Creators.gameIndexFailure(err))
   }
-  yield put(Creators.gameIndexFailure())
-  yield put(
-    NotificationCreators.addNotification(
-      notificationError(response, 'Erro ao Autenticar')
-    )
-  )
 }
+
+export function* show({ id }: ReturnType<typeof Creators.GAME_SHOW_REQUEST>) {
+  try {
+    const response = yield call(api.get, `/game/${id}`)
+    yield put(Creators.gameShowSuccess(response.data))
+  } catch (error) {
+    yield put(Creators.gameShowFailure(error))
+  }
+}
+
 export function* store({
   data
 }: ReturnType<typeof Creators.GAME_STORE_REQUEST>) {
-  if (data.id) {
+  try {
+    const response = data.id
+      ? yield call(api.put, `/game/${data.id}`, data)
+      : yield call(api.post, `/game`, data)
+    yield put(Creators.gameStoreSuccess(response.data))
+    yield put(push('/games'))
+  } catch (error) {
+    yield put(Creators.gameStoreFailure(error))
   }
-  const {
-    data: { error },
-    ok
-  } = data.id
-    ? yield call(api.put, `/game/${data.id}`, data)
-    : yield call(api.post, `/game`, data)
-
-  if (ok) {
-    yield put(Creators.gameStoreSuccess(data))
-    return
-  }
-
-  yield put(Creators.gameStoreFailure(error))
 }
 
 export function* destroy({
   id
 }: ReturnType<typeof Creators.GAME_DELETE_REQUEST>) {
-  const {
-    data: { error },
-    ok
-  } = yield call(api.delete, `/game/${id}`)
-  if (ok) {
+  try {
+    yield call(api.delete, `/game/${id}`)
     yield put(Creators.gameDeleteSuccess(id))
-    return
+  } catch (error) {
+    yield put(Creators.gameDeleteFailure(error))
   }
-
-  yield put(Creators.authSignInFailure(error))
 }
 
 export const saga = [
-  takeLatest(Types.GAME_INDEX_REQUEST, fetch),
+  takeLatest(Types.GAME_INDEX_REQUEST, index),
+  takeLatest(Types.GAME_SHOW_REQUEST, show),
   takeLatest(Types.GAME_STORE_REQUEST, store),
   takeLatest(Types.GAME_DELETE_REQUEST, destroy)
 ]

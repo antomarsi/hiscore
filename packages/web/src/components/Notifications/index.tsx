@@ -96,7 +96,6 @@ const Notifications: React.FC = () => {
     (state: ApplicationState) => state.notification.notifications
   )
   const dispatch = useDispatch()
-
   return (
     <Container>
       <Wrapper>
