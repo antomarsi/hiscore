@@ -30,7 +30,9 @@ const Header: React.FC = () => {
               title={authData.user.displayName}
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item href="#action/3.1">Games</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/dashboard">
+                Dashboard
+              </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
                 onClick={() => dispatch(AuthCreators.authReset())}

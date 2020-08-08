@@ -10,7 +10,8 @@ import {
   MdSettings,
   MdAccountCircle,
   MdExitToApp,
-  MdBook
+  MdBook,
+  MdDashboard
 } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { ApplicationState } from 'src/store'
@@ -36,12 +37,16 @@ const Sidebar: React.FC = () => {
   )
   return (
     <>
+      <h6 className="sidebar-heading d-flex align-items-center px-3 mt-4 mb-1 text-muted">
+        <MdHome />
+        <span>General</span>
+      </h6>
       <Nav
         className="flex-column"
         variant="pills"
         activeKey={location?.pathname}
       >
-        <SidebarItem path="/dashboard" title="Dashboard" icon={MdHome} />
+        <SidebarItem path="/dashboard" title="Dashboard" icon={MdDashboard} />
         <SidebarItem path="/games" title="Games" icon={MdVideogameAsset} />
         <SidebarItem
           path="/documentation"

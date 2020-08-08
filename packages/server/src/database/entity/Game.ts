@@ -23,6 +23,10 @@ export class Game {
   name: string
 
   @Column()
+  @Length(0, 256)
+  description: string
+
+  @Column()
   @Generated('uuid')
   apiKey: string
 
@@ -42,6 +46,7 @@ export class Game {
   @Exclude()
   @ManyToOne(type => User, user => user.games)
   user: User
+
   @Exclude()
   @OneToMany(type => Leaderboard, leaderboard => leaderboard.game)
   leaderboards: Leaderboard[]

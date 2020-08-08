@@ -14,5 +14,5 @@ export const GOOGLE = {
 
 export default {
   secret: process.env.APP_SECRET || '',
-  expiresIn: '10s'
+  expiresIn: '24h'
 }

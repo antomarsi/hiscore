@@ -1,10 +1,12 @@
 import { Request, Response } from 'express'
-import { getRepository } from 'typeorm'
+import { getRepository, getCustomRepository } from 'typeorm'
+import { classToPlain } from 'class-transformer'
 
 import IControllerBase from './IController'
 import { checkToken, generateToken, sendToken } from '../middlewares/jwt'
 import { User, Game } from '../database/entity'
 import { Leaderboard } from '../database/entity/Leaderboard'
+import { GameRepository } from './../database/repository/GameRepository'
 
 class GameController extends IControllerBase {
   public static path = '/game'
@@ -23,11 +25,11 @@ class GameController extends IControllerBase {
   }
 
   public async index(req: Request, res: Response) {
-    const gameRepository = getRepository(Game)
-    var games = gameRepository.find({
-      where: { userId: (req.user as User).id }
-    })
-    return res.status(200).json()
+    var games = await getCustomRepository(GameRepository).findByUser(
+      req.user!,
+      { countLeaderboard: true }
+    )
+    return res.status(200).json(classToPlain(games))
   }
 
   public async store(req: Request, res: Response) {

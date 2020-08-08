@@ -15,27 +15,7 @@ app.use(express.json())
 // CORS AND SECURITY
 app.use(cors())
 app.use(helmet())
-app.use(morgan('dev'))
-
-// PASSPORT
-// passport.serializeUser((user: User, done) => {
-//   done(null, user.id)
-// })
-
-// passport.deserializeUser((id: number, done) => {
-//   getRepository(User)
-//     .findOneOrFail(id)
-//     .then(user => done(null, user))
-//     .catch(e => done(e, null))
-// })
-
-//passport.use(githubStrategy)
-//passport.use(googleStrategy)
-//passport.use('gameApiKey', bearerGameStrategy)
-//passport.use('user-jwt', bearerUserStrategy)
-
-//app.use(passport.initialize())
-//app.use(passport.session())
+app.use(morgan('combined'))
 
 // ROUTES
 app.use('/api', routes)

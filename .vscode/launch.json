@@ -5,6 +5,7 @@
       "type": "node",
       "request": "attach",
       "name": "Docker: Attach to Node",
+      "restart": true,
       "protocol": "auto",
       "port": 5858,
       "localRoot": "${workspaceFolder}",

@@ -5,8 +5,9 @@ import { Table as RTable, TableProps, Spinner } from 'react-bootstrap'
 
 interface OwnProps {
   header: string[]
-  values?: ReactNode[][]
+  values: ReactNode[][]
   loading?: boolean
+  emptyMessage?: ReactNode | string
 }
 
 type Props = OwnProps & TableProps
@@ -31,7 +32,7 @@ const Table: React.FC<Props> = ({ header, values, loading, ...props }) => {
             </td>
           </tr>
         )}
-        {values &&
+        {values.length > 0 &&
           values.map((row, idx) => (
             <tr key={idx}>
               {row.map((v, idx) => (
@@ -39,6 +40,13 @@ const Table: React.FC<Props> = ({ header, values, loading, ...props }) => {
               ))}
             </tr>
           ))}
+        {values.length === 0 && !loading && (
+          <tr>
+            <td colSpan={header.length} className="text-center">
+              {props.emptyMessage}
+            </td>
+          </tr>
+        )}
       </tbody>
     </RTable>
   )
@@ -48,7 +56,8 @@ Table.defaultProps = {
   striped: true,
   bordered: true,
   hover: true,
-  responsive: true
+  responsive: true,
+  emptyMessage: 'No data Found'
 }
 
 export default Table

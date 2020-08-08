@@ -4,6 +4,7 @@ import Table from 'src/components/Table'
 import { useSelector, useDispatch } from 'react-redux'
 import { ApplicationState } from 'src/store'
 import { Creators } from 'src/store/ducks/game/types'
+import { Link } from 'react-router-dom'
 
 // import { Container } from './styles';
 
@@ -38,6 +39,12 @@ const Games: React.FC = () => {
               'hidden',
               'Edit/Destroy'
             ])}
+            emptyMessage={
+              <span>
+                No game found.{' '}
+                <Link to="/games/new">Click here to create a game here.</Link>
+              </span>
+            }
           />
         </Card.Body>
       </Card>
