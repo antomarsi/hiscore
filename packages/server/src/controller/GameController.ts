@@ -9,7 +9,6 @@ import { Leaderboard } from '../database/entity/Leaderboard'
 import { GameRepository } from './../database/repository/GameRepository'
 import { validate } from 'class-validator'
 import { ValidationErrorException } from './../exceptions/validationError'
-import HttpException from './../exceptions/httpException'
 
 class GameController extends IControllerBase {
   public static path = '/game'
@@ -18,6 +17,13 @@ class GameController extends IControllerBase {
     this.router.get('/', checkToken, generateToken, sendToken, this.index)
     this.router.get('/:id', checkToken, generateToken, sendToken, this.show)
     this.router.post('/', checkToken, generateToken, sendToken, this.store)
+    this.router.put(
+      '/:id/favorited',
+      checkToken,
+      generateToken,
+      sendToken,
+      this.favorite
+    )
     this.router.put('/:id', checkToken, generateToken, sendToken, this.update)
     this.router.delete(
       '/:id',
@@ -30,17 +36,32 @@ class GameController extends IControllerBase {
 
   public async index(req: Request, res: Response) {
     var games = await getCustomRepository(GameRepository).findByUser(req.user, {
-      countLeaderboard: true
+      leaderboards: true
     })
     return res.status(200).json(classToPlain(games))
   }
 
   public async show(req: Request, res: Response) {
     var games = await getCustomRepository(GameRepository).findOne({
-      relations: ['user'],
+      relations: ['user', 'leaderboards'],
       where: { user: req.user, id: req.params.id }
     })
     return res.status(200).json(classToPlain(games))
+  }
+
+  public async favorite(req: Request, res: Response, next: NextFunction) {
+    try {
+      const gameRepository = getRepository(Game)
+      var game = await gameRepository.findOneOrFail({
+        relations: ['user'],
+        where: { user: req.user, id: req.params.id }
+      })
+      game.favorited = req.body.favorited
+      await gameRepository.save(game)
+      res.status(200).json({ favorited: game.favorited })
+    } catch (err) {
+      next(err)
+    }
   }
 
   public async store(req: Request, res: Response, next: NextFunction) {
@@ -59,6 +80,7 @@ class GameController extends IControllerBase {
       })
       game.leaderboards = [defaultLeaderboard]
       game = await gameRepository.save(game)
+      await getRepository(Leaderboard).save(defaultLeaderboard)
       return res.status(200).json(classToPlain(game))
     } catch (err) {
       next(err)
@@ -81,7 +103,6 @@ class GameController extends IControllerBase {
         throw new ValidationErrorException(errors)
       }
       const a = await gameRepository.update(req.params.id, values)
-      console.log('updated', a)
 
       res.status(200).json(a)
     } catch (err) {
@@ -89,17 +110,18 @@ class GameController extends IControllerBase {
     }
   }
 
-  public async destroy(req: Request, res: Response) {
-    //Get parameters from the body
-    const { id } = req.query
-    const gameRepository = getRepository(Game)
-
-    //Get user from the database
-    let game = await gameRepository.findOneOrFail({
-      where: { id, userId: (req.user as User).id }
-    })
-    gameRepository.delete(game)
-    res.status(200).json()
+  public async destroy(req: Request, res: Response, next: NextFunction) {
+    try {
+      const gameRepository = getRepository(Game)
+      let game = await gameRepository.findOneOrFail({
+        relations: ['user'],
+        where: { id: req.params.id, user: req.user }
+      })
+      await gameRepository.delete(req.params.id)
+      res.status(200).json()
+    } catch (err) {
+      next(err)
+    }
   }
 }
 

@@ -20,7 +20,6 @@ import { sign } from 'jsonwebtoken'
 import auth from '../../config/auth'
 
 @Entity()
-@Unique(['user', 'name'])
 export class Game {
   @Allow()
   @PrimaryGeneratedColumn()
@@ -45,6 +44,10 @@ export class Game {
   @Column({ type: 'bool', default: false })
   useAuthentication: boolean = false
 
+  @Allow()
+  @Column({ type: 'bool', default: false })
+  favorited: boolean = false
+
   @Exclude()
   @Column()
   @CreateDateColumn()
@@ -60,8 +63,10 @@ export class Game {
   @ManyToOne(type => User, user => user.games, { nullable: false })
   user: User
 
-  @Exclude()
-  @OneToMany(type => Leaderboard, leaderboard => leaderboard.game)
+  @Allow()
+  @OneToMany(type => Leaderboard, leaderboard => leaderboard.game, {
+    cascade: true
+  })
   leaderboards: Leaderboard[]
 
   @AfterInsert()

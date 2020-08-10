@@ -2,7 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 
 import api from 'src/services/api'
 import { Creators, Types } from './types'
-import { push } from 'connected-react-router';
+import { push } from 'connected-react-router'
 
 export function* signIn({
   code,
@@ -19,6 +19,7 @@ export function* signIn({
     return
   } catch (err) {
     yield put(Creators.authSignInFailure(err))
+    yield put(push('/login'))
   }
 }
 

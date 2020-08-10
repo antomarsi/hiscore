@@ -4,16 +4,18 @@ import { Table as RTable, TableProps, Spinner } from 'react-bootstrap'
 
 interface OwnProps {
   header: string[]
-  values: ReactNode[][]
   loading?: boolean
   noDataMessage: ReactNode | string
+  children?: ReactNode
+  empty: boolean
 }
 
 type Props = OwnProps & TableProps
 
 const Table: React.FC<Props> = ({
   header,
-  values,
+  empty,
+  children,
   loading,
   noDataMessage,
   ...props
@@ -37,15 +39,8 @@ const Table: React.FC<Props> = ({
             </td>
           </tr>
         )}
-        {values.length > 0 &&
-          values.map((row, idx) => (
-            <tr key={idx}>
-              {row.map((v, idx) => (
-                <td key={idx}>{v}</td>
-              ))}
-            </tr>
-          ))}
-        {values.length === 0 && !loading && (
+        {!empty && !loading && children}
+        {!loading && empty && (
           <tr>
             <td colSpan={header.length} className="text-center">
               {noDataMessage}
@@ -62,6 +57,7 @@ Table.defaultProps = {
   bordered: true,
   hover: true,
   responsive: true,
+  empty: true,
   noDataMessage: 'No data Found'
 }
 

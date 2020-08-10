@@ -47,13 +47,42 @@ export default createReducer(INITIAL_STATE, {
     store: { loading: false, error }
   }),
 
+  [Types.GAME_FAVORITED_REQUEST]: (state = INITIAL_STATE, { id }) => ({
+    ...state,
+    favorited: { ...state.favorited, loading: [...state.favorited.loading, id] }
+  }),
+  [Types.GAME_FAVORITED_SUCCESS]: (
+    state = INITIAL_STATE,
+    { id, favorited }
+  ) => ({
+    ...state,
+    favorited: {
+      ...state.favorited,
+      loading: state.favorited.loading.filter(v => v !== id)
+    },
+    index: {
+      ...state.index,
+      data: state.index.data.map(game =>
+        game.id === id ? { ...game, favorited } : game
+      )
+    }
+  }),
+  [Types.GAME_FAVORITED_FAILURE]: (state = INITIAL_STATE, { id, error }) => ({
+    ...state,
+    favorited: { loading: state.favorited.loading.filter(v => v !== id), error }
+  }),
+
   [Types.GAME_DELETE_REQUEST]: (state = INITIAL_STATE) => ({
     ...state,
     delete: { loading: true }
   }),
-  [Types.GAME_DELETE_SUCCESS]: (state = INITIAL_STATE, { data }) => ({
+  [Types.GAME_DELETE_SUCCESS]: (state = INITIAL_STATE, { id }) => ({
     ...state,
-    delete: { loading: false }
+    delete: { loading: false },
+    index: {
+      ...state.index,
+      data: state.index.data.filter(game => game.id !== id)
+    }
   }),
   [Types.GAME_DELETE_FAILURE]: (state = INITIAL_STATE, { error }) => ({
     ...state,

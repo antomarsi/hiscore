@@ -11,10 +11,15 @@ export const { Types, Creators } = createActions({
   gameShowSuccess: ['data'],
   gameShowFailure: ['error'],
 
-  // Store
+  // Store / Update
   gameStoreRequest: ['data'],
   gameStoreSuccess: ['data'],
   gameStoreFailure: ['error'],
+
+  // Store / Update
+  gameFavoritedRequest: ['id', 'favorited'],
+  gameFavoritedSuccess: ['id', 'favorited'],
+  gameFavoritedFailure: ['id', 'error'],
 
   // Delete
   gameDeleteRequest: ['id'],
@@ -31,13 +36,21 @@ export const GameCreators = Creators
  * Data types
  */
 
+export interface Leaderboard {
+  id?: number
+  name: string
+  saveMethod: string
+  resetMethod: string
+}
+
 export interface Game {
   id?: number
   name: string
   description: string
   apiKey?: string
   useAuthentication: boolean
-  leaderboardCounts?: number
+  leaderboards?: Leaderboard[]
+  favorited: boolean
 }
 
 /**
@@ -52,6 +65,10 @@ export interface GameState {
   readonly store: defaultLoadingError
   readonly delete: defaultLoadingError
   readonly showing: defaultLoadingError & { data?: Game }
+  readonly favorited: {
+    loading: number[]
+    error?: any
+  }
 }
 
 export const InitialGameState: GameState = {
@@ -64,11 +81,16 @@ export const InitialGameState: GameState = {
     loading: false,
     error: undefined
   },
+  favorited: {
+    loading: [],
+    error: undefined
+  },
   delete: {
     loading: false,
     error: undefined
   },
   showing: {
+    data: undefined,
     loading: false,
     error: false
   }

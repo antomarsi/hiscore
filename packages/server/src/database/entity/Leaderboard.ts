@@ -10,6 +10,7 @@ import {
 import { Length, Allow } from 'class-validator'
 import { Score } from './Score'
 import { Game } from './Game'
+import { Exclude } from 'class-transformer'
 
 export enum SAVE_METHODS {
   LATEST = 'LATEST',
@@ -47,14 +48,17 @@ export class Leaderboard {
   })
   resetMethod: RESET_METHOD
 
+  @Exclude()
   @Column()
   @CreateDateColumn()
   createdAt: Date
 
+  @Exclude()
   @Column()
   @UpdateDateColumn()
   updatedAt: Date
 
+  @Exclude()
   @ManyToOne(type => Game, user => user.leaderboards, {
     onDelete: 'CASCADE',
     nullable: false

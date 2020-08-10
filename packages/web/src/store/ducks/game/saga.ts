@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest, takeEvery } from 'redux-saga/effects'
 
 import api from 'src/services/api'
 import { Creators, Types } from './types'
@@ -19,6 +19,18 @@ export function* show({ id }: ReturnType<typeof Creators.GAME_SHOW_REQUEST>) {
     yield put(Creators.gameShowSuccess(response.data))
   } catch (error) {
     yield put(Creators.gameShowFailure(error))
+  }
+}
+
+export function* favorited({
+  id,
+  favorited
+}: ReturnType<typeof Creators.GAME_FAVORITED_REQUEST>) {
+  try {
+    const response = yield call(api.put, `/game/${id}/favorited`, { favorited })
+    yield put(Creators.gameFavoritedSuccess(id, response.data.favorited))
+  } catch (error) {
+    yield put(Creators.gameFavoritedFailure(id, error))
   }
 }
 
@@ -50,6 +62,7 @@ export function* destroy({
 export const saga = [
   takeLatest(Types.GAME_INDEX_REQUEST, index),
   takeLatest(Types.GAME_SHOW_REQUEST, show),
+  takeEvery(Types.GAME_FAVORITED_REQUEST, favorited),
   takeLatest(Types.GAME_STORE_REQUEST, store),
   takeLatest(Types.GAME_DELETE_REQUEST, destroy)
 ]
