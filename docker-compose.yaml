@@ -1,32 +1,5 @@
 version: '3'
 services:
-  api:
-    build:
-      context: .
-    working_dir: /app/packages/server
-    links:
-      - db
-    depends_on:
-      - db
-    env_file: ./packages/server/.env
-    ports:
-      - 3333:3333
-      - 5858:5858
-    volumes:
-      - .:/app
-    tty: true
-  web:
-    build:
-      context: .
-    working_dir: /app/packages/web
-    depends_on:
-      - api
-    ports:
-      - 3334:3000
-      - 35729:35729
-    volumes:
-      - .:/app
-    tty: true
   db:
     image: postgres
     volumes:

@@ -4,12 +4,11 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Docker: Attach to Node",
+      "name": "Attach to Node",
       "restart": true,
       "protocol": "auto",
       "port": 5858,
       "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/app",
       "outFiles": ["${workspaceFolder}/packages/server/dist/**/*.js"],
       "skipFiles": ["<node_internals>/**/*.js"]
     }
