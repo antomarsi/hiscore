@@ -1,10 +1,14 @@
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { createServer } from 'http'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 import app from './app'
 import api from './config/api'
 import database from './config/database'
+
 
 createConnection(database)
   .then(async connection => {
