@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './assets/sass/index.scss'
+import 'sweetalert2/src/sweetalert2.scss'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { gridSystem } from './utils/develop'

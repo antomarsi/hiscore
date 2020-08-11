@@ -1,7 +1,9 @@
+import React from 'react'
 import { NotificationItemStyleProps } from 'src/components/Notifications'
 import { MdSignalWifiOff, MdReport, MdTimerOff } from 'react-icons/md'
 import store from 'src/store'
 import { NotificationCreators } from 'src/store/ducks/notification/types'
+import { Link } from 'react-router-dom'
 
 export const NetworkError: NotificationItemStyleProps = {
   title: 'Erro na comunicação com o servidor',
@@ -12,7 +14,20 @@ export const NetworkError: NotificationItemStyleProps = {
 
 export const ServerError: NotificationItemStyleProps = {
   title: 'Server error',
-  body: 'Something went wrong, please report the problem',
+  body: (
+    <span>
+      Something went wrong,{' '}
+      <a
+        href="https://github.com/antomarsi/hiscore/issues"
+        target="_blank"
+        className={'text-white'}
+        rel="noopener noreferrer"
+      >
+        <u>please report the problem</u>
+      </a>
+    </span>
+  ),
+  autohide: false,
   variant: 'danger',
   icon: MdReport
 }
@@ -40,6 +55,7 @@ export const handleError = (error: any) => {
   }
   return null
 }
+
 export const notificationError = (
   error: any,
   title = 'Um erro ocorreu'

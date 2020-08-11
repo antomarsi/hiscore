@@ -36,14 +36,13 @@ api.interceptors.response.use(
     return response
   },
   error => {
+    if (error.response.status === 401) {
+      store.store.dispatch(AuthCreators.authReset())
+      store.store.dispatch(push('/login'))
+    }
     const notification = notificationError(error)
     if (notification) {
       store.store.dispatch(NotificationCreators.addNotification(notification))
-    }
-
-    if (error.response?.status === 401) {
-      store.store.dispatch(AuthCreators.authReset())
-      store.store.dispatch(push('/login'))
     }
     return Promise.reject(error)
   }
