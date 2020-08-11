@@ -1,11 +1,11 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class InitialMigration1597069983871 implements MigrationInterface {
-    name = 'InitialMigration1597069983871'
+export class InitialMigration1597189049566 implements MigrationInterface {
+    name = 'InitialMigration1597189049566'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "social_provider_provider_enum" AS ENUM('GOOGLE', 'GITHUB')`);
-        await queryRunner.query(`CREATE TABLE "social_provider" ("id" SERIAL NOT NULL, "providerId" character varying NOT NULL, "accessKey" character varying NOT NULL, "provider" "social_provider_provider_enum" NOT NULL, "userId" integer, CONSTRAINT "UQ_daea7dda28630efc23153691abb" UNIQUE ("accessKey", "provider"), CONSTRAINT "PK_27f0b9006e0c7a2779e77a68298" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "social_provider" ("id" SERIAL NOT NULL, "providerId" character varying NOT NULL, "provider" "social_provider_provider_enum" NOT NULL, "userId" integer, CONSTRAINT "UQ_39dd49d1d89ddc54cd212c59b12" UNIQUE ("provider", "providerId"), CONSTRAINT "PK_27f0b9006e0c7a2779e77a68298" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "displayName" character varying NOT NULL, "email" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "player" ("id" SERIAL NOT NULL, "displayName" character varying NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, "data" text, CONSTRAINT "PK_65edadc946a7faf4b638d5e8885" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "score" ("id" SERIAL NOT NULL, "player_name" character varying, "score" integer NOT NULL, "playerId" integer, "leaderboardId" integer, CONSTRAINT "PK_1770f42c61451103f5514134078" PRIMARY KEY ("id"))`);
