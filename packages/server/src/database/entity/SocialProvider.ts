@@ -14,7 +14,7 @@ export enum SOCIAL_PROVIDER_TYPE {
 }
 
 @Entity()
-@Unique(['accessKey', 'provider'])
+@Unique(['provider', 'providerId'])
 export class SocialProvider {
   @PrimaryGeneratedColumn()
   id: number
@@ -22,10 +22,6 @@ export class SocialProvider {
   @Allow()
   @Column({nullable: false})
   providerId: string
-
-  @Allow()
-  @Column({ nullable: false })
-  accessKey: string
 
   @Allow()
   @Column({type: "enum", enum:SOCIAL_PROVIDER_TYPE})

@@ -9,7 +9,6 @@ import { Provider } from 'react-redux'
 export class UserRepository extends Repository<User> {
 
   upsertUser(
-    accessToken: string,
     profile: OAuthProfile,
     provider: SOCIAL_PROVIDER_TYPE
   ): Promise<User> {
@@ -32,7 +31,6 @@ export class UserRepository extends Repository<User> {
           })
           var newProvider = getRepository(SocialProvider).create({
             providerId: profile.id,
-            accessKey: accessToken,
             provider: provider
           })
           if (user.providers === undefined) {

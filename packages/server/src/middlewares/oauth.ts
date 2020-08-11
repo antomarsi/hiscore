@@ -32,7 +32,6 @@ export const githubAuthMiddleware = async (
       headers: { Authorization: `token ${access_token}` }
     })
     const user = await getCustomRepository(UserRepository).upsertUser(
-      access_token,
       {
         id: data.id,
         displayName: data.name,
@@ -64,7 +63,6 @@ export const googleAuthMiddleware = async (
       headers: { Authorization: `token ${value.token.access_token}` }
     })
     const user = getCustomRepository(UserRepository).upsertUser(
-      value.token.access_token,
       {
         id: data.id,
         displayName: data.name,
