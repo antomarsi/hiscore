@@ -62,7 +62,7 @@ export const googleAuthMiddleware = async (
     const { data } = await axios.get('https://api.github.com/user', {
       headers: { Authorization: `token ${value.token.access_token}` }
     })
-    const user = getCustomRepository(UserRepository).upsertUser(
+    const user = await getCustomRepository(UserRepository).upsertUser(
       {
         id: data.id,
         displayName: data.name,

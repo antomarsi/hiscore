@@ -35,7 +35,7 @@ class GameController extends IControllerBase {
   }
 
   public async index(req: Request, res: Response) {
-    var games = await getCustomRepository(GameRepository).findByUser(req.user, {
+    var games = await getCustomRepository(GameRepository).findByUser(req.user!, {
       leaderboards: true
     })
     return res.status(200).json(classToPlain(games))

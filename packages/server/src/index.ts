@@ -1,9 +1,11 @@
 import 'reflect-metadata'
-import { createConnection } from 'typeorm'
-import { createServer } from 'http'
 import dotenv from 'dotenv'
 
 dotenv.config()
+
+import { createConnection } from 'typeorm'
+import { createServer } from 'http'
+
 
 import app from './app'
 import database from './config/database'

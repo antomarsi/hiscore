@@ -6,7 +6,11 @@
   "repository": "git@github.com:antomarsi/hiscore-api.git",
   "author": "Antônio Marco da Silva <antonio.silva@bludata.com.br>",
   "license": "MIT",
+  "engines": {
+    "node": ">=12"
+  },
   "dependencies": {
+    "@types/dotenv": "^8.2.0",
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
@@ -25,7 +29,7 @@
     "typeorm": "^0.2.25"
   },
   "scripts": {
-    "start": "tsnd --ignore node_modules --transpile-only --no-notify --inspect=0.0.0.0:5858 --respawn src/index.ts",
+    "start": "tsnd --ignore node_modules --transpile-only --no-notify --respawn src/index.ts",
     "typeorm": "node --require ts-node/register ../../node_modules/typeorm/cli.js -f ./ormconfig.js"
   },
   "devDependencies": {
@@ -39,7 +43,6 @@
     "@types/morgan": "^1.9.1",
     "@types/simple-oauth2": "^4.1.0",
     "@types/validator": "^13.1.0",
-    "ts-node-dev": "^1.0.0-pre.52",
-    "typescript": "^3.9.7"
+    "ts-node-dev": "^1.0.0-pre.52"
   }
 }
