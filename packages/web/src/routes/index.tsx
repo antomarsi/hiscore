@@ -25,6 +25,7 @@ import Notifications from '../components/Notifications'
 import Games from 'src/pages/Games'
 import { SidebarWrapper, ContentPageWrapper } from './styles'
 import GameForm from './../pages/Games/GameForm'
+import ViewGame from './../pages/Games/ViewGame'
 
 const UnloggedRoute: React.SFC<RouteProps> = ({ component, ...rest }: any) => {
   const NotAuthenticated = useSelector(
@@ -85,6 +86,7 @@ const Routes: React.SFC<{}> = props => {
         <Switch location={location}>
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute exact path="/games" component={Games} />
+          <PrivateRoute exact path="/games/:gameId" component={ViewGame} />
           <PrivateRoute exact path="/games/new" component={GameForm} />
           <PrivateRoute exact path="/games/edit/:gameId" component={GameForm} />
           <UnloggedRoute

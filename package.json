@@ -14,7 +14,15 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
     "@hiscore/eslint-config": "*",
+    "husky": "^4.2.5",
     "typescript": "^3.9.7"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }

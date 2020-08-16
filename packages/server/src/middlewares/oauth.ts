@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import axios from 'axios'
-import { getCustomRepository } from 'typeorm'
 
 import { clientGithubOAuth, clientGoogleOAuth } from '../config/oauth'
 import HttpException from '../exceptions/httpException'
-import { UserRepository } from '../database/repository/UserRepository'
 import { SOCIAL_PROVIDER_TYPE } from '../database/entity/SocialProvider'
 import { GOOGLE, GITHUB } from '../config/auth'
 import { InvalidTokenException } from './../exceptions/tokenExceptions'
+import { User } from './../database/entity/User'
 
 export const githubAuthMiddleware = async (
   req: Request,
@@ -31,7 +30,7 @@ export const githubAuthMiddleware = async (
     const { data } = await axios.get('https://api.github.com/user', {
       headers: { Authorization: `token ${access_token}` }
     })
-    const user = await getCustomRepository(UserRepository).upsertUser(
+    const user = await User.upsertUser(
       {
         id: data.id,
         displayName: data.name,
@@ -62,7 +61,7 @@ export const googleAuthMiddleware = async (
     const { data } = await axios.get('https://api.github.com/user', {
       headers: { Authorization: `token ${value.token.access_token}` }
     })
-    const user = getCustomRepository(UserRepository).upsertUser(
+    const user = await User.upsertUser(
       {
         id: data.id,
         displayName: data.name,

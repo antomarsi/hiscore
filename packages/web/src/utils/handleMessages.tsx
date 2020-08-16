@@ -3,7 +3,6 @@ import { NotificationItemStyleProps } from 'src/components/Notifications'
 import { MdSignalWifiOff, MdReport, MdTimerOff } from 'react-icons/md'
 import store from 'src/store'
 import { NotificationCreators } from 'src/store/ducks/notification/types'
-import { Link } from 'react-router-dom'
 
 export const NetworkError: NotificationItemStyleProps = {
   title: 'Erro na comunicação com o servidor',

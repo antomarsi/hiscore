@@ -3,24 +3,16 @@ import { RouteComponentProps } from 'react-router-dom'
 
 // import { Container } from './styles';
 import { Card, Button, Form, Accordion } from 'react-bootstrap'
-import {
-  Formik,
-  Form as FormikForm,
-  FormikProps,
-  FieldArray,
-  getIn,
-  FieldArrayRenderProps,
-  FieldArrayConfig
-} from 'formik'
+import { Formik, Form as FormikForm, FormikProps, FieldArray } from 'formik'
 import * as yup from 'yup'
 import Input from 'src/components/Form/Input'
 import Check from 'src/components/Form/Check'
 import { useSelector, useDispatch } from 'react-redux'
 import { ApplicationState } from 'src/store'
 import { push } from 'connected-react-router'
-import { GameCreators, Leaderboard, Game } from 'src/store/ducks/game/types'
-import { LEADERBOARD_CONSTS } from 'src/utils/constants'
-import { MdAdd, MdDelete } from 'react-icons/md'
+import { GameCreators, Leaderboard } from 'src/store/ducks/game/types'
+import { MdAdd } from 'react-icons/md'
+import LeaderboardItem from './LeaderboardItem'
 
 type Props = RouteComponentProps<{ gameId?: string }>
 
@@ -35,7 +27,8 @@ interface FormValues {
 const initialValues: FormValues = {
   name: '',
   description: '',
-  useAuthentication: false
+  useAuthentication: false,
+  leaderboards: []
 }
 
 const validationSchema = yup.object({
@@ -47,14 +40,7 @@ const validationSchema = yup.object({
     yup.object({
       id: yup.number().nullable(),
       name: yup.string().required(),
-      saveMethod: yup
-        .string()
-        .oneOf(Object.values(LEADERBOARD_CONSTS.SAVE_METHODS).map(v => v.value))
-        .required(),
-      resetMethod: yup
-        .string()
-        .oneOf(Object.values(LEADERBOARD_CONSTS.RESET_METHOD).map(v => v.value))
-        .nullable()
+      resetMethod: yup.string().nullable()
     })
   )
 })
@@ -105,10 +91,22 @@ const GameFormContent: React.SFC<FormikProps<FormValues>> = ({
             <Card>
               <Card.Header as="h5">
                 Leaderboards{' '}
+                <span
+                  className={
+                    props.values.leaderboards!.length >= 3 ? 'text-danger' : ''
+                  }
+                >
+                  {props.values.leaderboards?.length}/3
+                </span>
                 <Button
                   variant="success"
                   className="float-right"
-                  onClick={() => push({ name: 'New Leaderboard' })}
+                  disabled={props.values.leaderboards!.length >= 3}
+                  onClick={() =>
+                    push({
+                      name: 'New Leaderboard'
+                    })
+                  }
                 >
                   <MdAdd />
                 </Button>
@@ -147,62 +145,6 @@ const GameFormContent: React.SFC<FormikProps<FormValues>> = ({
     </Form>
   )
 }
-
-interface LeaderboardItemProps {
-  form: FormikProps<any>
-  value: Leaderboard
-  index: number
-  removeHandler: () => void
-}
-
-const LeaderboardItem: React.SFC<LeaderboardItemProps> = ({
-  value,
-  form,
-  index: key,
-  removeHandler
-}) => {
-  return (
-    <Card>
-      <Card.Header>
-        <Accordion.Toggle eventKey={key.toString()} as={Button} variant="link">
-          {value.name}{' '}
-        </Accordion.Toggle>
-        <Button variant="danger" className="float-right" onClick={removeHandler}>
-          <MdDelete />{' '}
-        </Button>
-      </Card.Header>
-      <Accordion.Collapse eventKey={key.toString()}>
-        <Card.Body>
-          <Input
-            label={'Name'}
-            name={`leaderboards[${key}].name`}
-            inputProps={{ placeholder: 'Name' }}
-          />
-          <Input
-            name={`leaderboards[${key}].saveMethod`}
-            label="Save Method"
-            inputProps={{ as: 'select' }}
-          >
-            {Object.values(LEADERBOARD_CONSTS.SAVE_METHODS).map(v => (
-              <option value={v.value}>{v.label}</option>
-            ))}
-          </Input>
-          <Input
-            name={`leaderboards[${key}].resetMethod`}
-            label="Reset Method"
-            inputProps={{ as: 'select' }}
-          >
-            {Object.values(LEADERBOARD_CONSTS.RESET_METHOD).map(v => (
-              <option value={v.value}>{v.label}</option>
-            ))}
-          </Input>
-          {JSON.stringify(form)}
-        </Card.Body>
-      </Accordion.Collapse>
-    </Card>
-  )
-}
-
 const GameForm: React.FC<Props> = props => {
   const isNew = props.match.params.gameId === undefined
   const showing = useSelector((state: ApplicationState) => state.game.showing)

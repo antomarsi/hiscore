@@ -2,14 +2,15 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne
+  ManyToOne,
+  BaseEntity
 } from 'typeorm'
 import { Leaderboard } from './Leaderboard'
 import { Player } from './Player'
 import { MaxLength } from 'class-validator'
 
 @Entity()
-export class Score {
+export class Score extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 

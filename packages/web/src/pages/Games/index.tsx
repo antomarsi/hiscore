@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Card, Button, Accordion } from 'react-bootstrap'
+import { Card, Button } from 'react-bootstrap'
 import Table from 'src/components/Table'
 import { useSelector, useDispatch } from 'react-redux'
 import { ApplicationState } from 'src/store'
@@ -14,7 +14,8 @@ import {
   MdContentCopy,
   MdRefresh,
   MdStar,
-  MdStarBorder
+  MdStarBorder,
+  MdRemoveRedEye
 } from 'react-icons/md'
 import Swal from 'sweetalert2'
 import { NotificationCreators } from 'src/store/ducks/notification/types'
@@ -86,7 +87,7 @@ const Games: React.SFC = () => {
           {data.map(game => (
             <tr>
               <td>{game.name}</td>
-              <td>{game.leaderboards?.length}</td>
+              <td>{game.leaderboards?.length}/3</td>
               <td
                 className={
                   game.useAuthentication ? 'text-success' : 'text-danger'
@@ -103,6 +104,13 @@ const Games: React.SFC = () => {
                 </Button>
               </td>
               <td>
+                <Button
+                  as={Link}
+                  to={`/games/${game.id}`}
+                  variant="outline-primary"
+                >
+                  <MdRemoveRedEye size={24} />
+                </Button>
                 <Button
                   variant="outline-primary"
                   onClick={() => {

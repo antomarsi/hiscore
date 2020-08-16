@@ -5,17 +5,14 @@ import {
   UpdateDateColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  OneToMany
+  OneToMany,
+  BaseEntity
 } from 'typeorm'
 import { Length, Allow } from 'class-validator'
 import { Score } from './Score'
 import { Game } from './Game'
 import { Exclude } from 'class-transformer'
 
-export enum SAVE_METHODS {
-  LATEST = 'LATEST',
-  HIGHEST = 'HIGHEST'
-}
 export enum RESET_METHOD {
   HOURLY = 'HOURLY',
   DAILY = 'DAILY',
@@ -23,7 +20,7 @@ export enum RESET_METHOD {
 }
 
 @Entity()
-export class Leaderboard {
+export class Leaderboard extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -31,14 +28,6 @@ export class Leaderboard {
   @Column({ nullable: false })
   @Length(4, 20)
   name: string
-
-  @Allow()
-  @Column({
-    type: 'enum',
-    enum: SAVE_METHODS,
-    default: SAVE_METHODS.HIGHEST
-  })
-  saveMethod: SAVE_METHODS
 
   @Allow()
   @Column({
@@ -60,8 +49,7 @@ export class Leaderboard {
 
   @Exclude()
   @ManyToOne(type => Game, user => user.leaderboards, {
-    onDelete: 'CASCADE',
-    nullable: false
+    onDelete: 'CASCADE'
   })
   game: Game
 

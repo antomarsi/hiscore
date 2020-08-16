@@ -1,11 +1,10 @@
-import User from "./../database/entity/User";
+export {}
+
 declare global {
   namespace Express {
     interface Request {
       token?: string
-      user?: User
+      user?: any
     }
   }
 }
-
-declare module 'simple-oauth2'

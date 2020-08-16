@@ -6,7 +6,6 @@ import IControllerBase from './IController'
 import { checkToken, generateToken, sendToken } from '../middlewares/jwt'
 import { User, Game } from '../database/entity'
 import { Leaderboard } from '../database/entity/Leaderboard'
-import { GameRepository } from './../database/repository/GameRepository'
 import { validate } from 'class-validator'
 import { ValidationErrorException } from './../exceptions/validationError'
 
@@ -35,14 +34,14 @@ class GameController extends IControllerBase {
   }
 
   public async index(req: Request, res: Response) {
-    var games = await getCustomRepository(GameRepository).findByUser(req.user, {
+    var games = await Game.findByUser(req.user!, {
       leaderboards: true
     })
     return res.status(200).json(classToPlain(games))
   }
 
   public async show(req: Request, res: Response) {
-    var games = await getCustomRepository(GameRepository).findOne({
+    var games = await Game.findOne({
       relations: ['user', 'leaderboards'],
       where: { user: req.user, id: req.params.id }
     })
@@ -51,13 +50,12 @@ class GameController extends IControllerBase {
 
   public async favorite(req: Request, res: Response, next: NextFunction) {
     try {
-      const gameRepository = getRepository(Game)
-      var game = await gameRepository.findOneOrFail({
+      var game = await Game.findOneOrFail({
         relations: ['user'],
         where: { user: req.user, id: req.params.id }
       })
       game.favorited = req.body.favorited
-      await gameRepository.save(game)
+      await game.save()
       res.status(200).json({ favorited: game.favorited })
     } catch (err) {
       next(err)
@@ -66,8 +64,7 @@ class GameController extends IControllerBase {
 
   public async store(req: Request, res: Response, next: NextFunction) {
     try {
-      const gameRepository = getRepository(Game)
-      var game = gameRepository.create({
+      var game = Game.create({
         ...req.body,
         user: req.user
       } as Object)
@@ -75,12 +72,7 @@ class GameController extends IControllerBase {
       if (errors.length) {
         throw new ValidationErrorException(errors)
       }
-      const defaultLeaderboard = getRepository(Leaderboard).create({
-        name: 'default'
-      })
-      game.leaderboards = [defaultLeaderboard]
-      game = await gameRepository.save(game)
-      await getRepository(Leaderboard).save(defaultLeaderboard)
+      game = await game.save()
       return res.status(200).json(classToPlain(game))
     } catch (err) {
       next(err)
@@ -88,9 +80,8 @@ class GameController extends IControllerBase {
   }
   public async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const gameRepository = getCustomRepository(GameRepository)
-      var game = await gameRepository.findOne({
-        relations: ['user'],
+      var game = await Game.findOneOrFail({
+        relations: ['user', 'leaderboards'],
         where: { user: req.user, id: req.params.id }
       })
 
@@ -102,9 +93,17 @@ class GameController extends IControllerBase {
       if (errors.length > 0) {
         throw new ValidationErrorException(errors)
       }
-      const a = await gameRepository.update(req.params.id, values)
-
-      res.status(200).json(a)
+      const deletedLeadeboards = game.leaderboards
+        .filter(
+          leaderboard => !values.leaderboards.find(v => v.id === leaderboard.id)
+        )
+        .map(v => v.id)
+      Game.merge(game, values)
+      game = await game.save()
+      if (deletedLeadeboards.length) {
+        Leaderboard.delete(deletedLeadeboards)
+      }
+      res.status(200).json(plainToClass(Game, game))
     } catch (err) {
       next(err)
     }

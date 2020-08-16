@@ -3,7 +3,8 @@ import {
   Column,
   Unique,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  BaseEntity
 } from 'typeorm'
 import { User } from './User';
 import { Allow } from 'class-validator';
@@ -15,7 +16,7 @@ export enum SOCIAL_PROVIDER_TYPE {
 
 @Entity()
 @Unique(['provider', 'providerId'])
-export class SocialProvider {
+export class SocialProvider extends BaseEntity  {
   @PrimaryGeneratedColumn()
   id: number
 

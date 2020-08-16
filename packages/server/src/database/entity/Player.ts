@@ -2,14 +2,15 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToMany
+  OneToMany,
+  BaseEntity
 } from 'typeorm'
 
 import { IsNotEmpty, IsEmail, MaxLength } from 'class-validator'
 import { Score } from './Score'
 
 @Entity()
-export class Player {
+export class Player extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 

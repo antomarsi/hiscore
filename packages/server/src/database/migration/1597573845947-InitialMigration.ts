@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class InitialMigration1597189049566 implements MigrationInterface {
-    name = 'InitialMigration1597189049566'
+export class InitialMigration1597573845947 implements MigrationInterface {
+    name = 'InitialMigration1597573845947'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "social_provider_provider_enum" AS ENUM('GOOGLE', 'GITHUB')`);
@@ -11,7 +11,7 @@ export class InitialMigration1597189049566 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "score" ("id" SERIAL NOT NULL, "player_name" character varying, "score" integer NOT NULL, "playerId" integer, "leaderboardId" integer, CONSTRAINT "PK_1770f42c61451103f5514134078" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "leaderboard_savemethod_enum" AS ENUM('LATEST', 'HIGHEST')`);
         await queryRunner.query(`CREATE TYPE "leaderboard_resetmethod_enum" AS ENUM('HOURLY', 'DAILY', 'WEEKLY')`);
-        await queryRunner.query(`CREATE TABLE "leaderboard" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "saveMethod" "leaderboard_savemethod_enum" NOT NULL DEFAULT 'HIGHEST', "resetMethod" "leaderboard_resetmethod_enum", "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "gameId" integer NOT NULL, CONSTRAINT "PK_76fd1d52cf44d209920f73f4608" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "leaderboard" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "saveMethod" "leaderboard_savemethod_enum" NOT NULL DEFAULT 'HIGHEST', "resetMethod" "leaderboard_resetmethod_enum", "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "gameId" integer, CONSTRAINT "PK_76fd1d52cf44d209920f73f4608" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "game" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "apiKey" uuid NOT NULL DEFAULT uuid_generate_v4(), "useAuthentication" boolean NOT NULL DEFAULT false, "favorited" boolean NOT NULL DEFAULT false, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" integer NOT NULL, CONSTRAINT "PK_352a30652cd352f552fef73dec5" PRIMARY KEY ("id"))`);
         await queryRunner.query(`ALTER TABLE "social_provider" ADD CONSTRAINT "FK_42804e18502e6709aba2f68f5f8" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "score" ADD CONSTRAINT "FK_66f5fb8ee865712db248080d5ea" FOREIGN KEY ("playerId") REFERENCES "player"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
