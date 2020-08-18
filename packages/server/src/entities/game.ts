@@ -7,67 +7,62 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   Generated,
-  BeforeInsert,
   AfterInsert,
-  BeforeUpdate,
-  Unique
+  BaseEntity
 } from 'typeorm'
-import { Length, Allow, IsNotEmpty } from 'class-validator'
-import { User } from './User'
-import { Leaderboard } from './Leaderboard'
-import { Exclude } from 'class-transformer'
+import { Length, IsNotEmpty } from 'class-validator'
+import { User } from './user'
+import { Leaderboard } from './leaderboard'
 import { sign } from 'jsonwebtoken'
-import auth from '../../config/auth'
+import auth from '../services/auth'
+import { Field, ID } from 'type-graphql'
 
 @Entity()
-export class Game {
-  @Allow()
+export class Game extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  @Field(() => ID)
+  id!: number
 
-  @Allow()
   @Column({ nullable: false })
   @Length(4, 20)
-  name: string
+  @Field()
+  name!: string
 
-  @Allow()
   @Column()
   @Length(0, 256)
-  description: string
+  @Field()
+  description!: string
 
-  @Exclude()
   @Column({ nullable: false })
   @Generated('uuid')
-  apiKey: string
+  @Field()
+  apiKey!: string
 
-  @Allow()
   @Column({ type: 'bool', default: false })
+  @Field()
   useAuthentication: boolean = false
 
-  @Allow()
   @Column({ type: 'bool', default: false })
+  @Field()
   favorited: boolean = false
 
-  @Exclude()
   @Column()
   @CreateDateColumn()
-  createdAt: Date
+  createdAt!: Date
 
-  @Exclude()
   @Column()
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt!: Date
 
-  @Exclude()
   @IsNotEmpty()
-  @ManyToOne(type => User, user => user.games, { nullable: false })
-  user: User
+  @ManyToOne(() => User, user => user.games, { nullable: false })
+  user!: User
 
-  @Allow()
-  @OneToMany(type => Leaderboard, leaderboard => leaderboard.game, {
+  @OneToMany(() => Leaderboard, leaderboard => leaderboard.game, {
     cascade: true
   })
-  leaderboards: Leaderboard[]
+  @Field()
+  leaderboards!: Leaderboard[]
 
   @AfterInsert()
   setApiKey() {

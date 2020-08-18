@@ -4,32 +4,35 @@ import {
   PrimaryGeneratedColumn,
   OneToMany
 } from 'typeorm'
+import { Field, ObjectType } from 'type-graphql'
 
 import { IsNotEmpty, IsEmail, MaxLength } from 'class-validator'
-import { Score } from './Score'
+import { Score } from './score'
 
 @Entity()
+@ObjectType()
 export class Player {
   @PrimaryGeneratedColumn()
-  id: number
+  @Field()
+  id!: number
 
   @Column()
   @MaxLength(20)
   @IsNotEmpty()
-  displayName: string
+  @Field()
+  displayName!: string
 
   @Column()
   @IsEmail()
   @IsNotEmpty()
-  email: string
+  @Field()
+  email!: string
 
   @Column()
   @IsNotEmpty()
-  password: string
+  password!: string
 
-  @Column({ type: 'simple-json', nullable: true })
-  data: any
-
-  @OneToMany(type => Score, score => score.player)
-  scores: Score[]
+  @OneToMany(() => Score, score => score.player)
+  @Field()
+  scores!: Score[]
 }

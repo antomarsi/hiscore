@@ -3,10 +3,11 @@ import {
   Column,
   Unique,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  BaseEntity
 } from 'typeorm'
-import { User } from './User';
-import { Allow } from 'class-validator';
+import { User } from './user';
+import { Field, ID } from 'type-graphql';
 
 export enum SOCIAL_PROVIDER_TYPE {
   GOOGLE = "GOOGLE",
@@ -15,20 +16,22 @@ export enum SOCIAL_PROVIDER_TYPE {
 
 @Entity()
 @Unique(['provider', 'providerId'])
-export class SocialProvider {
+
+export class SocialProvider extends BaseEntity{
   @PrimaryGeneratedColumn()
-  id: number
+  @Field(() => ID)
+  id!: number
 
-  @Allow()
   @Column({nullable: false})
-  providerId: string
+  @Field()
+  providerId!: string
 
-  @Allow()
   @Column({type: "enum", enum:SOCIAL_PROVIDER_TYPE})
-  provider: SOCIAL_PROVIDER_TYPE
+  @Field()
+  provider!: SOCIAL_PROVIDER_TYPE
 
-  @ManyToOne(type => User, user => user.providers, {
+  @ManyToOne(() => User, user => user.providers, {
     onDelete: 'CASCADE'
   })
-  user: User
+  user!: User
 }

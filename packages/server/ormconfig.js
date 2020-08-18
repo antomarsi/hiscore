@@ -1,21 +1,18 @@
-const path = require('path');
-
-require('dotenv').config();
-
 module.exports = {
-  type: 'postgres',
-  post: process.env.PG_PORT || 5432,
-  host: process.env.PG_HOST,
-  username: process.env.PG_USER,
-  password: process.env.PG_PASS,
-  database: process.env.PG_DB,
-  synchronize: false,
-  entities: ['src/database/entity/*.ts'],
-  subscribers: ['src/database/subscriber/*.ts'],
-  migrations: ['src/database/migration/*.ts'],
+  type: process.env.DB_TYPE || 'postgres',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 5432,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  synchronize: process.env.NODE_ENV === 'development',
+  logging: false,
+  entities: ['src/entities/**/*.ts'],
+  migrations: ['src/migrations/**/*.ts'],
+  subscribers: ['src/subscribers/**/*.ts'],
   cli: {
-    entitiesDir: 'src/database/entity',
-    migrationsDir: 'src/database/migration',
-    subscribersDir: 'src/database/subscriber'
+    entitiesDir: 'src/entities',
+    migrationsDir: 'src/migrations',
+    subscribersDir: 'src/subscribers'
   }
 }

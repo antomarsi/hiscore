@@ -1,5 +1,3 @@
-const url = process.env.API_URL || 'http://localhost:3333'
-
 export const GITHUB = {
   clientId: process.env.PASSPORT_GITHUB_CLIENT_ID || '',
   clientSecret: process.env.PASSPORT_GITHUB_CLIENT_SECRET || '',
@@ -13,6 +11,6 @@ export const GOOGLE = {
 }
 
 export default {
-  secret: process.env.APP_SECRET || '',
+  secret: process.env.SECRET || '',
   expiresIn: '24h'
 }

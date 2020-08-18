@@ -1,12 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import { sign, verify } from 'jsonwebtoken'
 import { getRepository } from 'typeorm'
 
-import { User } from '../database/entity'
-import auth from '../config/auth'
-import { InvalidTokenException } from '../exceptions/tokenExceptions'
+import auth from './auth'
+import { User } from 'src/entities/user'
+import { sign } from 'jsonwebtoken'
 
-const createToken = (user: User) => {
+export const createToken = (user: User) => {
   return sign(
     {
       id: user.id
@@ -16,15 +15,6 @@ const createToken = (user: User) => {
       expiresIn: auth.expiresIn
     }
   )
-}
-
-export const generateToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  req.token = createToken(req.user as User)
-  return next()
 }
 
 export const sendToken = (req: Request, res: Response, next: NextFunction) => {
@@ -37,9 +27,7 @@ export const checkToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.headers.authorization) {
-    return next(new InvalidTokenException())
-  }
+
   const authorization = req.headers.authorization.split(' ')
   if (authorization.length !== 2) {
     return next(new InvalidTokenException())

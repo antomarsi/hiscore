@@ -5,12 +5,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  OneToMany
+  OneToMany,
+  BaseEntity
 } from 'typeorm'
-import { Length, Allow } from 'class-validator'
-import { Score } from './Score'
-import { Game } from './Game'
-import { Exclude } from 'class-transformer'
+import { Length } from 'class-validator'
+import { Score } from './score'
+import { Game } from './game'
+import { Field, ID } from 'type-graphql'
 
 export enum SAVE_METHODS {
   LATEST = 'LATEST',
@@ -23,48 +24,46 @@ export enum RESET_METHOD {
 }
 
 @Entity()
-export class Leaderboard {
+export class Leaderboard extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  @Field(() => ID)
+  id!: number
 
-  @Allow()
   @Column({ nullable: false })
   @Length(4, 20)
-  name: string
+  @Field()
+  name!: string
 
-  @Allow()
   @Column({
     type: 'enum',
     enum: SAVE_METHODS,
     default: SAVE_METHODS.HIGHEST
   })
-  saveMethod: SAVE_METHODS
+  @Field()
+  saveMethod!: SAVE_METHODS
 
-  @Allow()
   @Column({
     type: 'enum',
     enum: RESET_METHOD,
     nullable: true
   })
-  resetMethod: RESET_METHOD
+  @Field()
+  resetMethod!: RESET_METHOD
 
-  @Exclude()
   @Column()
   @CreateDateColumn()
-  createdAt: Date
+  createdAt!: Date
 
-  @Exclude()
   @Column()
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt!: Date
 
-  @Exclude()
-  @ManyToOne(type => Game, user => user.leaderboards, {
+  @ManyToOne(() => Game, user => user.leaderboards, {
     onDelete: 'CASCADE',
     nullable: false
   })
-  game: Game
+  game!: Game
 
-  @OneToMany(type => Score, score => score.leaderboard)
-  scores: Score[]
+  @OneToMany(() => Score, score => score.leaderboard)
+  scores!: Score[]
 }
