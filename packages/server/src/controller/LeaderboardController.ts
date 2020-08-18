@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
 
 import IControllerBase from './IController'
-import { checkToken, generateToken, sendToken } from '../middlewares/jwt'
-import { User, Game, Leaderboard } from '../database/entity'
+import { checkToken, generateToken, sendToken } from '../services/jwt'
+import { User, Game, Leaderboard } from '../entities'
 
 class LeaderboardController extends IControllerBase {
   public static path = '/leaderboard'

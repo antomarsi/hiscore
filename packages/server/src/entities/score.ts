@@ -1,33 +1,33 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne
-} from 'typeorm'
-import { Leaderboard } from './Leaderboard'
-import { Player } from './Player'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
+import { Leaderboard } from './leaderboard'
+import { Player } from './player'
 import { MaxLength } from 'class-validator'
+import { Field, ID } from 'type-graphql'
 
 @Entity()
 export class Score {
   @PrimaryGeneratedColumn()
-  id: number
+  @Field(() => ID)
+  id!: number
 
-  @ManyToOne(type => Player, player => player.scores, {
+  @ManyToOne(() => Player, player => player.scores, {
     nullable: true,
     onDelete: 'CASCADE'
   })
-  player: Player
+  @Field()
+  player!: Player
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   @MaxLength(20)
-  player_name: string;
+  @Field()
+  player_name!: string
 
   @Column()
-  score: number
+  @Field()
+  score!: number
 
-  @ManyToOne(type => Leaderboard, leaderboard => leaderboard.scores, {
+  @ManyToOne(() => Leaderboard, leaderboard => leaderboard.scores, {
     onDelete: 'CASCADE'
   })
-  leaderboard: Leaderboard
+  leaderboard!: Leaderboard
 }

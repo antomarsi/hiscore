@@ -10,7 +10,7 @@ import {
 import { Game } from './game'
 import { SocialProvider, SOCIAL_PROVIDER_TYPE } from './social_provider'
 import { Field, ID, ObjectType } from 'type-graphql'
-import { OAuthProfile } from 'src/config/oauth'
+import { OAuthProfile } from 'src/services/oauth'
 
 @Entity({ name: 'users'})
 @ObjectType()
